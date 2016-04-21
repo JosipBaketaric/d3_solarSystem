@@ -13,11 +13,16 @@
 
 	<body>
 		<script type="text/javascript">
+			var bSize = 0;
+			var bDistance = 0;
+
 			var width = 3800;
 			var height = 2000;
 			var data;
 			var t0 = Date.now();
 			var container;
+			var sunData = [ {"key":"sun"},
+							{"radius": 696342} ];
 	 
 			//Append SVG
 			var svg = d3.select("body")
@@ -65,7 +70,6 @@
 			  	.attr("class", "sun")
 			  	.attr("cx", width/2)
 			    .attr("cy", height/2)
-			    .style("z-index", "10")
 			    .style("fill","#FB7209");
 			}
 
@@ -120,9 +124,10 @@
 
 				   var distanceScale = d3.scale.linear()
 			       .domain([minDistance,maxDistance])
-			       .range([80,160,240,320,400,480,560,640]);
+			       .range([80, 640]);
 
 			       var dCheat = [80, 160, 240, 320, 400, 480, 560, 640];
+			       var sCheat = [];
 
 			       console.log("minRadius: " + minRadius + ", maxRadius: " + maxRadius);
 			       //END OF SCALING
@@ -142,10 +147,15 @@
 					    	}
 					    )
 					    .style("fill","none")
+					    .attr("transform","skewX(30)")
+					    .attr("transform","skewY(30)")
 					    .style("stroke","white");
-
+					}
+					);
+					    /*
 				    d3.select(this)
 					    .append("circle")
+					    .attr("class", "real_planets")
 					    .attr("r", function(d){
 					    	var tempS = sizeScale(d.radius);
 					    	if(tempS < 0)
@@ -159,17 +169,46 @@
 					    )
 					    .attr("cy", 0)
 					 	.style("fill","red")
-					 	.style("z-index", "10")
+					 	.attr("transform","skewX(30)")
 					 	.on("mouseover", function(d){
 					 		console.log("Planet: "+ d.key);
 					 	})
 					    .attr("class", "planet");   
 		    		}
-		    	);
+		    	);*/
+
+		    	container.selectAll("g.real_planets")
+		    	.data(data)
+		    	.enter()
+		    	.append("g")
+		    	.attr("class", "real_planets")
+		    	.each(function(d, i) {
+				    d3.select(this)
+				    	.append("circle")
+					    .attr("class", "real_planets")
+					    .attr("r", function(d){
+					    	var tempS = sizeScale(d.radius);
+					    	if(tempS < 0)
+					    		tempS = tempS * (-1);
+					    	return tempS;
+					    	}
+					    )
+					    .attr("cx", function() {
+					    	return dCheat[d.id];
+					   		}
+					    )
+					    .attr("cy", 0)
+					 	.style("fill","red")
+					 	.attr("transform","skewX(30)")
+					 	.on("mouseover", function(d){
+					 		console.log("Planet: "+ d.key);
+					 	})
+					}
+				);
 
 		    	d3.timer(function() {
 		    var delta = (Date.now() - t0);
-		    svg.selectAll(".planet").attr("transform", function(d) {
+		    svg.selectAll(".real_planets").attr("transform", function(d) {
 		      return "rotate("+ d.orbit_side + 
 		       (90 + delta * (1/d.orbital_period)/20) + ")";
 		    });
