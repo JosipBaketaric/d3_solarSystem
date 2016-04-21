@@ -6,30 +6,30 @@
 		<meta charset="utf-8"/>
 		<title>Solar system</title>
 		<link rel="stylesheet" type="text/css" href="css_script.css">
+
 		<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 	</head>
 
 	<body>
 		<script type="text/javascript">
-			var width = 1900;
-			var height = 950;
-
+			var width = 3800;
+			var height = 2000;
+			var data;
+			var t0 = Date.now();
 			var container;
-
-			var zoom = d3.behavior.zoom()
-		    .scaleExtent([1, 10])
-		    .on("zoom", zoomed);		 
-
+	 
 			//Append SVG
 			var svg = d3.select("body")
 			 .append("svg")
 			 .attr("class", "svgClass")
 			 .attr("width", width)
 			 .attr("height", height)
-			 .style("background-color","black")
-			 .call(zoom);
+			 .style("background-color","black");
 			 //Container for zoom
-			 var container = svg.append("g");
+
+			 var container = svg.append("g")
+		    .attr("transform", "translate(" + width/2 + "," + height/2 + ")");
 
 			 //Create stars
 			for(var i = 0; i < (width / 10); i++) {
@@ -38,12 +38,12 @@
 			//Create sun
 			createSun();
 
-
-
-
-
-
-
+			d3.json("planets.json", function(error, json){
+					if (error) return console.warn(error);
+              		data = json;
+              		createPlanets(data);
+				}
+			)
 
 			function createUniverse() {
 			    createDot(Math.floor(Math.random()*width), Math.floor(Math.random()*height));
@@ -59,29 +59,125 @@
 
 			function createSun()
 			{
-				container
+				svg
 				.append("circle")
 			  	.attr("r", 60)
 			  	.attr("class", "sun")
 			  	.attr("cx", width/2)
 			    .attr("cy", height/2)
+			    .style("z-index", "10")
 			    .style("fill","#FB7209");
 			}
 
-			function createPlanet()
+			function createPlanets(data)
 			{
-				container
-				.append("circle")
-			  	.attr("r", 40)
-			  	.attr("class", "planet")
-			  	.attr("cx", width/2)
-			    .attr("cy", height/2)
-			    .style("fill","#FB7209");
+				//SOME SCALING
+	              	var maxRadius = data[0].radius;
+					var minRadius = data[0].radius;
+					var maxOrbital_period = data[0].orbital_period;
+					var minOrbital_period = data[0].orbital_period;
+					var maxDistance = data[0].distance_from_the_sun;
+					var minDistance = data[0].distance_from_the_sun;
+					
+					for(var i = 0; i < data.length; i++)
+					{
+						//Size
+						if(data[i].radius > maxRadius)
+						{
+							maxRadius = data[i].radius;
+						}
+						if(data[i] < minRadius)
+						{
+							minRadius = data[i].radius;
+						}
+						//Speed
+						if(data[i].orbital_period > maxOrbital_period)
+						{
+							maxOrbital_period = data[i].orbital_period;
+						}
+						if(data[i].orbital_period < minOrbital_period)
+						{
+							minOrbital_period = data[i].orbital_period;
+						}
+						//Distance
+						if(data[i].distance_from_the_sun > maxDistance)
+						{
+							maxDistance = data[i].distance_from_the_sun;
+						}
+						if(data[i].distance_from_the_sun < minDistance)
+						{
+							minDistance = data[i].distance_from_the_sun;
+						}
+					}
+					//scale everything
+					var sizeScale = d3.scale.linear()
+			       .domain([minRadius,maxRadius])
+			       .range([10, 50]);
+
+			       var speedScale = d3.scale.linear()
+			       .domain([minOrbital_period,maxOrbital_period])
+			       .range([0.1, 2]);
+
+				   var distanceScale = d3.scale.linear()
+			       .domain([minDistance,maxDistance])
+			       .range([80,160,240,320,400,480,560,640]);
+
+			       var dCheat = [80, 160, 240, 320, 400, 480, 560, 640];
+
+			       console.log("minRadius: " + minRadius + ", maxRadius: " + maxRadius);
+			       //END OF SCALING
+
+				
+				container.selectAll("g.planet")
+				.data(data)
+				.enter()
+				.append("g")
+				.attr("class", "planet")
+				.each(function(d, i) {
+				    d3.select(this)
+					    .append("circle")
+					    .attr("class", "orbit")
+					    .attr("r", function(d){
+					    	return dCheat[d.id];
+					    	}
+					    )
+					    .style("fill","none")
+					    .style("stroke","white");
+
+				    d3.select(this)
+					    .append("circle")
+					    .attr("r", function(d){
+					    	var tempS = sizeScale(d.radius);
+					    	if(tempS < 0)
+					    		tempS = tempS * (-1);
+					    	return tempS;
+					    	}
+					    )
+					    .attr("cx", function() {
+					    	return dCheat[d.id];
+					   		}
+					    )
+					    .attr("cy", 0)
+					 	.style("fill","red")
+					 	.style("z-index", "10")
+					 	.on("mouseover", function(d){
+					 		console.log("Planet: "+ d.key);
+					 	})
+					    .attr("class", "planet");   
+		    		}
+		    	);
+
+		    	d3.timer(function() {
+		    var delta = (Date.now() - t0);
+		    svg.selectAll(".planet").attr("transform", function(d) {
+		      return "rotate("+ d.orbit_side + 
+		       (90 + delta * (1/d.orbital_period)/20) + ")";
+		    });
+		  });
+		    //END OF TIMER
+
 			}
 
-			function zoomed() {
-			  container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-			}
 		</script>
 	</body>
 </html>

@@ -1,17 +1,26 @@
 [
     {
     	"key": "Mercury",
+        "id": "0",
     	"orbital_period": "0.2408467",
+        "distance_from_the_sun": "57",
+        "orbit_side": "-",
     	"radius": 2439.64
     	},
     {
     	"key": "Venus",
-    	"orbital_period": "-0.61519726",
+        "id": "1",
+    	"orbital_period": "0.61519726",
+        "distance_from_the_sun": "108",
+        "orbit_side": "+",
     	"radius": 6051.59
     	},
     {
         "key": "Earth",
+        "id": "2",
     	"orbital_period": "1",
+        "distance_from_the_sun": "150",
+        "orbit_side": "-",
     	"radius": 6378.1,        
         "values": [
             {
@@ -29,12 +38,18 @@
     },
     {
     	"key": "Mars",
+        "id": "3",
     	"orbital_period": "1.8808476",
+        "distance_from_the_sun": "228",
+        "orbit_side": "-",
     	"radius": 3397.00
     	},
     {
         "key": "Jupiter",
+        "id": "4",
     	"orbital_period": "11.862615",
+        "distance_from_the_sun": "779",
+        "orbit_side": "+",
     	"radius": 71492.68,
         "values": [
             {
@@ -85,7 +100,10 @@
     },
     {
         "key": "Saturn",
+        "id": "5",
     	"orbital_period": "29.447498",
+        "distance_from_the_sun": "1043",
+        "orbit_side": "+",
     	"radius": 60267.14,       
         "values": [
             {
@@ -169,7 +187,10 @@
     },
     {
         "key": "Uranus",
-    	"orbital_period": "-84.016846",
+        "id": "6",
+    	"orbital_period": "84.016846",
+        "distance_from_the_sun": "2088",
+        "orbit_side": "-",
     	"radius": 25557.25,
         "values": [
             {
@@ -231,7 +252,10 @@
     },
     {
         "key": "Neptune",
+        "id": "7",
     	"orbital_period": "164.79132",
+        "distance_from_the_sun": "4050",
+        "orbit_side": "-",
     	"radius": 24766.36,
         "values": [
             {
