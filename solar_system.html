@@ -1,34 +1,24 @@
 <!DOCTYPE html>
+
 <html>
+
 	<head>
 		<meta charset="utf-8"/>
 		<title>Solar system</title>
-
+		<link rel="stylesheet" type="text/css" href="css_script.css">
 		<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-
-		<style type="text/css">
-			.dot {
-		    position: absolute;
-		    width: 2px;
-		    height: 2px;
-		    background: white;
-			}
-	</style>
-
 	</head>
+
 	<body>
 		<script type="text/javascript">
 			var width = 1900;
 			var height = 950;
 
 			var container;
+
 			var zoom = d3.behavior.zoom()
 		    .scaleExtent([1, 10])
-		    .on("zoom", zoomed);
-
-		    function zoomed() {
-			  container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-			}
+		    .on("zoom", zoomed);		 
 
 			//Append SVG
 			var svg = d3.select("body")
@@ -38,10 +28,23 @@
 			 .attr("height", height)
 			 .style("background-color","black")
 			 .call(zoom);
-
+			 //Container for zoom
 			 var container = svg.append("g");
 
 			 //Create stars
+			for(var i = 0; i < (width / 10); i++) {
+			    createUniverse();
+			}
+			//Create sun
+			createSun();
+
+
+
+
+
+
+
+
 			function createUniverse() {
 			    createDot(Math.floor(Math.random()*width), Math.floor(Math.random()*height));
 
@@ -54,15 +57,11 @@
 				}
 			}
 
-			for(var i = 0; i < (width / 10); i++) {
-			    createUniverse();
-			}
-
 			function createSun()
 			{
 				container
 				.append("circle")
-			  	.attr("r", projection.scale())
+			  	.attr("r", 60)
 			  	.attr("class", "sun")
 			  	.attr("cx", width/2)
 			    .attr("cy", height/2)
@@ -80,9 +79,9 @@
 			    .style("fill","#FB7209");
 			}
 
-			createSun();
-
-
+			function zoomed() {
+			  container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+			}
 		</script>
 	</body>
 </html>
