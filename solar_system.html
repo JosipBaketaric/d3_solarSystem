@@ -3,9 +3,86 @@
 	<head>
 		<meta charset="utf-8"/>
 		<title>Solar system</title>
+
 		<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+		<style type="text/css">
+			.dot {
+		    position: absolute;
+		    width: 2px;
+		    height: 2px;
+		    background: white;
+			}
+	</style>
+
 	</head>
 	<body>
+		<script type="text/javascript">
+			var width = 1900;
+			var height = 950;
 
+			var container;
+			var zoom = d3.behavior.zoom()
+		    .scaleExtent([1, 10])
+		    .on("zoom", zoomed);
+
+		    function zoomed() {
+			  container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+			}
+
+			//Append SVG
+			var svg = d3.select("body")
+			 .append("svg")
+			 .attr("class", "svgClass")
+			 .attr("width", width)
+			 .attr("height", height)
+			 .style("background-color","black")
+			 .call(zoom);
+
+			 var container = svg.append("g");
+
+			 //Create stars
+			function createUniverse() {
+			    createDot(Math.floor(Math.random()*width), Math.floor(Math.random()*height));
+
+			    function createDot(x, y) {
+			    var elem=document.createElement("div");
+			    elem.setAttribute("class", "dot");
+			    elem.setAttribute("style", "left:"+x+"px;top:"+y+"px;");
+			    document.getElementsByTagName("body")[0].appendChild(elem);
+			    return elem;
+				}
+			}
+
+			for(var i = 0; i < (width / 10); i++) {
+			    createUniverse();
+			}
+
+			function createSun()
+			{
+				container
+				.append("circle")
+			  	.attr("r", projection.scale())
+			  	.attr("class", "sun")
+			  	.attr("cx", width/2)
+			    .attr("cy", height/2)
+			    .style("fill","#FB7209");
+			}
+
+			function createPlanet()
+			{
+				container
+				.append("circle")
+			  	.attr("r", 40)
+			  	.attr("class", "planet")
+			  	.attr("cx", width/2)
+			    .attr("cy", height/2)
+			    .style("fill","#FB7209");
+			}
+
+			createSun();
+
+
+		</script>
 	</body>
 </html>
