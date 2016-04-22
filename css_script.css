@@ -30,3 +30,8 @@
 	border: white;
 	font-size: 20px
 }
+
+#inlinediv {
+	display: inline;
+	position: absolute;
+}

@@ -10,17 +10,22 @@
 		<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 		<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 	</head>
-
-	<body> 
+	<div id="inlinediv">
+			<body> 
 
 		<div class="btnHolder">
-			<button type="button" id="button" onclick="newMode()" >Size</button>
+			<input onclick="newMode()" type="button" value="Adjust size" id="button"></input>
 		</div>
 		<br/>
 
+		<svg class="svgClass" width="3000" height="2500">
+      	<defs id="mdef">
+        	<pattern id="image" x="0" y="0" height="200" width="200">
+       			<image x="0" y="0" width="200" height="200" xlink:href="sun_edited.png"></image>
+        	</pattern>
+        </defs>
+		</div>
 		<script type="text/javascript">
-			var fFristStart = 0;
-			var currentMode = 0;
 			var stopTimer = 0;
 			var width = 3000;
 			var height = 2500;
@@ -30,7 +35,7 @@
 			var _Ddata;
 			var _Sdata;
 
-			var sunR = 50;
+			var sunR = 100;
 			var sunRconst = 50;
 			var sunRcalculated;
 
@@ -73,7 +78,7 @@
 				var sunRcalculated = sunData[0].radius;
 				var distanceOff;
 
-			    while(sunRcalculated > 500)
+			    while(sunRcalculated > 5000)
 			    {
 			    	sunRcalculated = sunRcalculated/2;
 			    	for(var i = 0; i < _Sdata.length; i++)
@@ -87,6 +92,8 @@
 			    for(var i = 0; i < 7; i++)
 			    	{
 			    		_Sdata[i].distance_from_the_sun = distanceOff[i];
+			    		console.log("_Sdata.radius["+i+"]: "+_Sdata[i].radius);
+			    		console.log("_Sdata.distance_from_the_sun["+i+"]: "+_Sdata[i].distance_from_the_sun);
 			    	}
 			}//End of Size scale
 
@@ -104,7 +111,7 @@
 
 				for(var i = 0; i < _data.length; i++)
 			    	{
-			    		_Ddata[i].distance_from_the_sun+= (50/2)+50;
+			    		_Ddata[i].distance_from_the_sun+= (100/2)+50;
 			    	}
 
 				sizeOff = [8, 8, 8, 8, 30, 25, 20, 20];
@@ -135,7 +142,7 @@
 			{	
 				stopTimer = 0;
 
-				console.log("_data u createPlanets (radius):     "+ _data[7].radius);
+				console.log("_data u createPlanets (radius):"+ _data[7].radius);
 				
 				//CREATE SUN
 				svg
@@ -144,7 +151,7 @@
 			  	.attr("class", "sun")
 			  	.attr("cx", width/2)
 			    .attr("cy", height/2)
-			    .style("fill","#FB7209");
+			    .style("fill", "url(#image)");
 				console.log("Stvorim Sunce");
 
 			    //CREATE ORBITALS
@@ -179,11 +186,9 @@
 					.attr("cx", function() {
 					    return d.distance_from_the_sun; })
 					.attr("cy", 0)
-					.style("fill","blue")
+					.style("fill", "blue")
 				});
-
-				console.log("Stvorim planete i uključim brojač");
-
+		    	//ROTATION COUNTER
 		    	d3.timer(function() 
 		    	{
 				    var delta = (Date.now() - t0);
@@ -203,31 +208,25 @@
 		    
 			}//END OF FUNCTION
 
+			//CHANGE MODE
 			function newMode(){
-				console.log("Uđem u newMode");
-				stopTimer = 1;
+				if (this.value=="Adjust size") {
+					this.value = "Adjust distance";
+					_data = _Sdata;
+					sunR = sunRcalculated;
+					createPlanets();
+				}
+    			else {
+    				this.value = "Adjust size";
+    				_data = _Ddata;
+					sunR = 50;
+					createPlanets();
+    			}
+
+    			stopTimer = 1;
 				d3.select("svg").select(".sun").remove();
 				d3.select("svg").selectAll("g.planet").remove();
 				d3.select("svg").selectAll("g.orbital").remove();
-
-				if(currentMode = 0)
-				{
-					_data = _Ddata;
-					currentMode = 1;
-					sunR = sunRconst;
-					document.getElementById("button").innerHTML = "Size";
-					console.log("Trenutno se pokazuje Distance");
-					createPlanets();
-				}
-				else
-				{
-					_data = _Sdata;
-					sunR = sunRcalculated;
-					currentMode = 0;
-					document.getElementById("button").innerHTML = "Distance";
-					console.log("Trenutno se prikazuje Size. i stvorim planete");
-					createPlanets();
-				}
 			}
 
 		</script>
