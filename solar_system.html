@@ -14,17 +14,25 @@
 	<body> 
 
 		<div class="btnHolder">
-			<button type="button" class="buttons" onclick="setSize()" >Size</button>
-			<button type="button" class="buttons" onclick="setDistance()" >Distance</button>
+			<button type="button" id="button" onclick="newMode()" >Size</button>
 		</div>
 		<br/>
 
 		<script type="text/javascript">
 			var fFristStart = 0;
+			var currentMode = 0;
+			var stopTimer = 0;
 			var width = 3000;
 			var height = 2500;
 
 			var data;
+			var _data;
+			var _Ddata;
+			var _Sdata;
+
+			var sunR = 50;
+			var sunRconst = 50;
+			var sunRcalculated;
 
 			var t0 = Date.now();
 
@@ -49,65 +57,66 @@
 			    createUniverse();
 			}
 
+			//GET DATA FROM JSON
 			d3.json("planets.json", function(error, json){
 					if (error) return console.warn(error);
               		data = json;
+              		_data = data;
               		setDistance();
+              		setSize();
 				}
 			)
 
 			function setSize()
 			{
-				_data = data;
-				var sunR = sunData[0].radius;
+				_Sdata = _data;
+				var sunRcalculated = sunData[0].radius;
 				var distanceOff;
 
-			    while(sunR > 600)
+			    while(sunRcalculated > 500)
 			    {
-			    	sunR = sunR/2;
-			    	for(var i = 0; i < _data.length; i++)
+			    	sunRcalculated = sunRcalculated/2;
+			    	for(var i = 0; i < _Sdata.length; i++)
 			    	{
-			    		_data[i].radius= _data[i].radius / 2;
+			    		_Sdata[i].radius= _Sdata[i].radius / 2;
 			    	}
 			    }
 
-			    distanceOff = [sunR+50, sunR+90, sunR+150, sunR+200, sunR+250, sunR+350, sunR+450];
+			    distanceOff = [sunRcalculated+50, sunRcalculated+90, sunRcalculated+150, sunRcalculated+200, sunRcalculated+250, sunRcalculated+350, sunRcalculated+450];
 
-			    for(var i = 0; i < _data.length; i++)
+			    for(var i = 0; i < 7; i++)
 			    	{
-			    		_data[i].distance_from_the_sun = distanceOff[i];
+			    		_Sdata[i].distance_from_the_sun = distanceOff[i];
 			    	}
-
-			    console.log("Sun size:"+ sunR);
-			    createPlanets(_data, sunR);
 			}//End of Size scale
 
 			function setDistance()
 			{
-				_data = data;
+				_Ddata = _data;
 				var sizeOff;
-				var sunR = 50;
 
-				while(_data[7].distance_from_the_sun >= ( (width/2) + 1000))
+				while(_Ddata[7].distance_from_the_sun > 2000)
 				{
 					for (var i = 0; i < _data.length; i++) {
-						_data[i].distance_from_the_sun/=2;
+						_Ddata[i].distance_from_the_sun = _Ddata[i].distance_from_the_sun/2;
 					}
 				}
 
 				for(var i = 0; i < _data.length; i++)
 			    	{
-			    		_data[i].distance_from_the_sun+= (sunR/2)+5;
+			    		_Ddata[i].distance_from_the_sun+= (50/2)+50;
 			    	}
 
-				sizeOff = [10, 15, 15, 12, 30, 25, 20, 20];
+				sizeOff = [8, 8, 8, 8, 30, 25, 20, 20];
 
-				for(var i = 0; i < _data.length; i++)
+				for(var i = 0; i < _Ddata.length; i++)
 			    	{
-			    		_data[i].radius = sizeOff[i];
+			    		_Ddata[i].radius = sizeOff[i];
+			    		console.log("radius od _Ddata["+i+"]: "+_Ddata[i].radius);
 			    	}
+			    	_data = _Ddata;
+			    	createPlanets();
 
-			    createPlanets(_data, sunR);
 			}//End of Distance scale
 
 			function createUniverse() {
@@ -122,8 +131,12 @@
 				}
 			}
 
-			function createPlanets(_data, sunR)
+			function createPlanets()
 			{	
+				stopTimer = 0;
+
+				console.log("_data u createPlanets (radius):     "+ _data[7].radius);
+				
 				//CREATE SUN
 				svg
 				.append("circle")
@@ -132,6 +145,7 @@
 			  	.attr("cx", width/2)
 			    .attr("cy", height/2)
 			    .style("fill","#FB7209");
+				console.log("Stvorim Sunce");
 
 			    //CREATE ORBITALS
 				container.selectAll("g.orbital")
@@ -149,6 +163,7 @@
 					.style("stroke","white");
 					}
 				);	//Append all orbitals
+				console.log("Stvorim orbitale");
 
 		    	container.selectAll("g.planet")
 		    	.data(_data)
@@ -167,6 +182,8 @@
 					.style("fill","blue")
 				});
 
+				console.log("Stvorim planete i uključim brojač");
+
 		    	d3.timer(function() 
 		    	{
 				    var delta = (Date.now() - t0);
@@ -174,6 +191,10 @@
 				    .attr("transform", function(d,t) 
 				    {
 						var rotateP = (90 + delta * (1/d.orbital_period)/20);
+						if(stopTimer == 1)
+						{
+							return true;
+						}
 				    	return "rotate("+ d.orbit_side + (rotateP) + ")";
 				    }
 				    );
@@ -183,17 +204,30 @@
 			}//END OF FUNCTION
 
 			function newMode(){
-				svg.selectAll(".sun")
-				.data(_data)
-				.remove();
+				console.log("Uđem u newMode");
+				stopTimer = 1;
+				d3.select("svg").select(".sun").remove();
+				d3.select("svg").selectAll("g.planet").remove();
+				d3.select("svg").selectAll("g.orbital").remove();
 
-				svg.selectAll("g.planet")
-				.data(_data)
-				.remove();
-
-				svg.selectAll("g.orbital")
-				.data(_data)
-				.remove();
+				if(currentMode = 0)
+				{
+					_data = _Ddata;
+					currentMode = 1;
+					sunR = sunRconst;
+					document.getElementById("button").innerHTML = "Size";
+					console.log("Trenutno se pokazuje Distance");
+					createPlanets();
+				}
+				else
+				{
+					_data = _Sdata;
+					sunR = sunRcalculated;
+					currentMode = 0;
+					document.getElementById("button").innerHTML = "Distance";
+					console.log("Trenutno se prikazuje Size. i stvorim planete");
+					createPlanets();
+				}
 			}
 
 		</script>
