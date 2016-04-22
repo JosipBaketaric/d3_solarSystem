@@ -11,14 +11,22 @@
 		<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 	</head>
 
-	<body>
+	<body> 
+		<div class="btnHolder">
+			<button type="button" class="buttons">Speed</button>
+			<button type="button" class="buttons">Size</button>
+			<button type="button" class="buttons">Distance</button>
+		</div>
+		<br/>
+
 		<script type="text/javascript">
 			var bSize = 0;
 			var bDistance = 0;
 
-			var width = 3800;
-			var height = 2000;
+			var width = 1900;
+			var height = 1600;
 			var data;
+			var _data;
 			var t0 = Date.now();
 			var container;
 			var sunData = [ {"key":"sun"},
@@ -50,6 +58,68 @@
 				}
 			)
 
+			function setSize()
+			{
+				_data = data;
+
+				var maxRadius = sunData.radius;
+				var minRadius = data[0].radius;
+
+				var distanceCheat = [80, 160, 240, 320, 400, 480, 560, 640];	//Custom distance
+
+				for(var i = 0; i < data.length; i++)
+					{
+						//Size
+						if(data[i].radius > maxRadius)
+						{
+							maxRadius = data[i].radius;
+						}
+						if(data[i] < minRadius)
+						{
+							minRadius = data[i].radius;
+						}
+					}
+
+				var sizeScale = d3.scale.linear()
+			       .domain([minRadius,maxRadius])
+			       .range([10, 80]);
+
+			    for (var i = data.length - 1; i >= 0; i--) {
+			    	_data[i].radius = sizeScale(data[i].radius);
+			    	_data[i].distance_from_the_sun = distanceCheat[i];		//Set custom distance
+			    }
+			}//End of Size scale
+
+			function setDistance()
+			{
+				_data = data;
+
+				var maxDistance = data[0].distance_from_the_sun;
+				var minDistance = data[0].distance_from_the_sun;
+
+				var sizeCheat = [20, 25, 25, 22, 30, 28, 20, 20];
+
+				for(var i = 0; i < data.length; i++){
+					if(data[i].distance_from_the_sun > maxDistance)
+					{
+						maxDistance = data[i].distance_from_the_sun;
+					}
+					if(data[i].distance_from_the_sun < minDistance)
+					{
+						minDistance = data[i].distance_from_the_sun;
+					}
+				}
+
+				var distanceScale = d3.scale.linear()
+			       .domain([minDistance,maxDistance])
+			       .range([80, 640]);
+
+				for(var i = 0; i < data.length; i++){
+					_data[i].distance_from_the_sun = distanceScale(data[i].distance_from_the_sun);
+					_data[i].radius = sizeCheat[i];
+				}
+			}//End of Distance scale
+
 			function createUniverse() {
 			    createDot(Math.floor(Math.random()*width), Math.floor(Math.random()*height));
 
@@ -73,169 +143,55 @@
 			    .style("fill","#FB7209");
 			}
 
-			function createPlanets(data)
-			{
-				//SOME SCALING
-	              	var maxRadius = data[0].radius;
-					var minRadius = data[0].radius;
-					var maxOrbital_period = data[0].orbital_period;
-					var minOrbital_period = data[0].orbital_period;
-					var maxDistance = data[0].distance_from_the_sun;
-					var minDistance = data[0].distance_from_the_sun;
-					
-					for(var i = 0; i < data.length; i++)
-					{
-						//Size
-						if(data[i].radius > maxRadius)
-						{
-							maxRadius = data[i].radius;
-						}
-						if(data[i] < minRadius)
-						{
-							minRadius = data[i].radius;
-						}
-						//Speed
-						if(data[i].orbital_period > maxOrbital_period)
-						{
-							maxOrbital_period = data[i].orbital_period;
-						}
-						if(data[i].orbital_period < minOrbital_period)
-						{
-							minOrbital_period = data[i].orbital_period;
-						}
-						//Distance
-						if(data[i].distance_from_the_sun > maxDistance)
-						{
-							maxDistance = data[i].distance_from_the_sun;
-						}
-						if(data[i].distance_from_the_sun < minDistance)
-						{
-							minDistance = data[i].distance_from_the_sun;
-						}
-					}
-					//scale everything
-					var sizeScale = d3.scale.linear()
-			       .domain([minRadius,maxRadius])
-			       .range([10, 50]);
-
-			       var speedScale = d3.scale.linear()
-			       .domain([minOrbital_period,maxOrbital_period])
-			       .range([0.1, 2]);
-
-				   var distanceScale = d3.scale.linear()
-			       .domain([minDistance,maxDistance])
-			       .range([80, 640]);
-
-			       var dCheat = [80, 160, 240, 320, 400, 480, 560, 640];
-			       var d2Cheat = [40,80,120,160,200,240,280,320];
-			       var sCheat = [];
-
-			       console.log("minRadius: " + minRadius + ", maxRadius: " + maxRadius);
-			       //END OF SCALING
-
-				
-				container.selectAll("g.planet")
+			function createPlanets(_data)
+			{		
+				container.selectAll("g.orbital")
 				.data(data)
 				.enter()
 				.append("g")
-				.attr("class", "planet")
+				.attr("class", "orbital")
 				.each(function(d, i) {
 				    d3.select(this)
-					    .append("circle")
-					    .attr("class", "orbit")
-					    .attr("r", function(d){
-					    	return dCheat[d.id];
-					    	}
-					    )
-					    .style("fill","none")
-					    .style("stroke","white");
+					.append("circle")
+					.attr("class", "orbit")
+					.attr("r", function(d){
+					    return d.distance_from_the_sun; })
+					.style("fill","none")
+					.style("stroke","white");
 					}
-					);
-					    /*
-				    d3.select(this)
-					    .append("circle")
-					    .attr("class", "real_planets")
-					    .attr("r", function(d){
-					    	var tempS = sizeScale(d.radius);
-					    	if(tempS < 0)
-					    		tempS = tempS * (-1);
-					    	return tempS;
-					    	}
-					    )
-					    .attr("cx", function() {
-					    	return dCheat[d.id];
-					   		}
-					    )
-					    .attr("cy", 0)
-					 	.style("fill","red")
-					 	.attr("transform","skewX(30)")
-					 	.on("mouseover", function(d){
-					 		console.log("Planet: "+ d.key);
-					 	})
-					    .attr("class", "planet");   
-		    		}
-		    	);*/
+				);	//Append all orbitals
 
-		    	container.selectAll("g.real_planets")
-		    	.data(data)
+		    	container.selectAll("g.planet")
+		    	.data(_data)
 		    	.enter()
 		    	.append("g")
-		    	.attr("class", "real_planets")
+		    	.attr("class", "planet")
 		    	.each(function(d, i) {
 				    d3.select(this)
-				    	.append("circle")
-					    .attr("class", "real_planets")
-					    .attr("r", function(d){
-					    	var tempS = sizeScale(d.radius);
-					    	if(tempS < 0)
-					    		tempS = tempS * (-1);
-					    	return tempS;
-					    	}
-					    )
-					    .attr("cx", function() {
-					    	return dCheat[d.id];
-					   		}
-					    )
-					    .attr("cy", 0)
-					 	.style("fill","red")
-					 	.on("mouseover", function(d){
-					 		console.log("Planet: "+ d.key);
-					 	})
+				    .append("circle")
+					.attr("class", "planet")
+					.attr("r", function(d){
+					    return d.radius })
+					.attr("cx", function() {
+					    return d.distance_from_the_sun; })
+					.attr("cy", 0)
+					.style("fill","red")
+				});
 
-					 	//other circle
-					 	d3.select(this)
-					 	.append("path")
-					 	.attr("class", "firstHalf")
-					 	.attr("d", function(){
-					 		var line = d3.svg.line.radial()
-						    .interpolate("basis")
-						    .tension(0)
-						    .radius(sizeScale(d.radius))
-						    .angle(function(d, i) { return angle(i); })
-						    return line;
-					 	})
-					 	.style("fill", "blue");
-					}
-				);
-
-		    	d3.timer(function() {
-		    var delta = (Date.now() - t0);
-
-		    svg.selectAll(".real_planets").attr("transform", function(d,t) {
-		    	var rotation_radius_x = dCheat[d.id];
-				var rotation_radius_y = d2Cheat[d.id];
-				var t_angle = (2 * Math.PI) * t;
-				var t_x = rotation_radius_x * Math.cos(t_angle);
-				var t_y = rotation_radius_y * Math.sin(t_angle);
-
-
-		      return "rotate("+ d.orbit_side + 
-		       (90 + delta * (1/d.orbital_period)/20) + ")";
-		    });
-		  });
-		    //END OF TIMER
-
-			}
+		    	d3.timer(function() 
+		    	{
+				    var delta = (Date.now() - t0);
+				    svg.selectAll(".planet")
+				    .attr("transform", function(d,t) 
+				    {
+						var rotateP = (90 + delta * (1/d.orbital_period)/20);
+				    	return "rotate("+ d.orbit_side + (rotateP) + ")";
+				    }
+				    );
+				}
+			  	);//END OF TIMER
+		    
+			}//END OF FUNCTION
 
 		</script>
 	</body>
