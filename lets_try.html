@@ -111,11 +111,31 @@
 						 {"name": "Neptune", "radius": 24766.36, "sunDistance": 4050, "orbitalperiod":164.79132, "orbitSide": "-"}
 						];
 
+			var satelits = [ {"name": "Moon", "orbitalPeriod": 27.321582},
+							{"name": "Ganymede", "orbitalPeriod": 7.155},
+							{"name": "Callisto", "orbitalperiod": 16.69},
+							{"name": "Io", "orbitalperiod": 1.796},
+							{"name": "Europa", "orbitalperiod": 3.551},
+							{"name": "Titan", "orbitalperiod": 15.95},
+							{"name": "Rhea", "orbitalperiod": 4.518},
+							{"name": "Iapetus", "orbitalperiod": 79.33},
+							{"name": "Dione", "orbitalperiod": 2.737},
+							{"name": "Tethys", "orbitalperiod": 1.888},
+							{"name": "Enceladus", "orbitalperiod": 252.3},
+							{"name": "Titania", "orbitalperiod": 8.706},
+							{"name": "Oberon", "orbitalperiod": 13.46},
+							{"name": "Umbriel", "orbitalperiod": 4.144},
+							{"name": "Ariel", "orbitalperiod": 2.52},
+							{"name": "Miranda", "orbitalperiod": 1.413},
+							{"name": "Mimas", "orbitalperiod": 0.942},
+							{"name": "Triton", "orbitalperiod": 5.877}, //- SIDE
+							{"name": "Proteus", "orbitalperiod": 1.122}
+							];
+
 			//SVG WIDTH/HEIGHT
 			var width = 1800;
 			var height = 900;
 			var t0 = Date.now();
-			var mode;
 
 			var zoom = d3.behavior.zoom()
 		    .scaleExtent([0.1, 10])
@@ -142,22 +162,27 @@
 
 			makeEverything(distanceData);
 
-			function makeEverything(_data){
+			function makeEverything(_data){				//MAKE ONE TIMER function timers(dataBroj, Mercury){do stuff}
+
 				for(var i = 0; i < 9; i++){
 					d3.select("#img"+(i+1))
 					.attr("width", _data[i].radius*2)
 					.attr("height", _data[i].radius*2)
-
 				}
 				
 				//ADD SUN
+				var j;
 				var sun = sunContainer.append("g")
 					.append("circle")
 					.attr("class", "sun")
 					.attr("r", _data[0].radius)
 					.attr("cx", width/2)
 					.attr("cy", height/2)
-					.style("fill", "url(#imageSun)");
+					.style("fill", "url(#imageSun)")
+					.on('click', function(d,i){  });
+
+
+					////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -181,6 +206,12 @@
 					.style("stroke", "white");
 
 
+
+					////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 				//ADD VENUS
 				var Venus = container.append("g")
 					.append("circle")
@@ -202,6 +233,11 @@
 
 
 
+					////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 				//ADD EARTH
 				var Earth = container.append("g")
 					.append("circle")
@@ -210,6 +246,27 @@
 					.attr("r", _data[3].radius)
 					.attr("cx", _data[3].sunDistance)
 					.style("fill", "url(#imageEarth)");
+
+				var earthSatelite = Earth.append("g")
+					.attr("class", "SateliteContainer")
+					.attr("transform", "translate(" + _data[3].sunDistance + ","+ 0 +")");
+
+				//add moon
+				earthSatelite.append("g")
+					.append("circle")
+					.attr("class", "satelits")
+					.attr("id", "s1")
+					.attr("r", 0.5)
+					.attr("cx", _data[3].radius + 1)
+					.style("fill", "gray");
+
+				//add moon's orbital
+				earthSatelite.append("g")
+					.append("circle")
+					.attr("class", "satelitsOrbital")
+					.attr("r", _data[3].radius + 1)
+					.style("fill", "none")
+					.style("stroke", "white");
 
 				//ADD EARTH'S ORBITAL
 				container.append("g")
@@ -220,6 +277,12 @@
 					.attr("cx", 0)
 					.style("fill", "none")
 					.style("stroke", "white");
+
+
+
+					////////////////////////////////////////////////////////////////////////////////////
+
+
 
 
 				//ADD MARS
@@ -242,6 +305,12 @@
 					.style("stroke", "white");
 
 
+
+					////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 				//ADD JUPITER
 				var Jupiter = container.append("g")
 					.append("circle")
@@ -251,6 +320,7 @@
 					.attr("cx", _data[5].sunDistance)
 					.style("fill", "url(#imageJupiter)");
 
+				
 				//ADD JUPITER'S ORBITAL
 				container.append("g")
 					.append("circle")
@@ -260,6 +330,15 @@
 					.attr("cx", 0)
 					.style("fill", "none")
 					.style("stroke", "white");
+
+
+
+
+
+					////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 
 				//ADD SATURN
@@ -282,6 +361,13 @@
 					.style("fill", "none")
 					.style("stroke", "white");
 
+
+
+					////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 				//ADD URANUS
 				var Uranus = container.append("g")
 					.append("circle")
@@ -300,6 +386,13 @@
 					.attr("cx", 0)
 					.style("fill", "none")
 					.style("stroke", "white");
+
+
+
+					////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 
 				//ADD NEPTUNE
@@ -323,6 +416,13 @@
 
 
 
+
+					////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 					//ROTATION TIMER MERCURY
 					d3.timer(function() {
 					    var delta = (Date.now() - t0);
@@ -333,6 +433,13 @@
 							})
 				    	}
 				    )//END OF TIMER
+
+
+
+					////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 				    //ROTATION TIMER VENUS
 					d3.timer(function() {
@@ -345,6 +452,13 @@
 				    	}
 				    )//END OF TIMER
 
+
+
+					////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 				    //ROTATION TIMER EARTH
 					d3.timer(function() {
 					    var delta = (Date.now() - t0);
@@ -355,6 +469,13 @@
 							})
 				    	}
 				    )//END OF TIMER
+
+
+
+					////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 				    //ROTATION TIMER MARS
 					d3.timer(function() {
@@ -367,6 +488,13 @@
 				    	}
 				    )//END OF TIMER
 
+
+
+					////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 				    //ROTATION TIMER JUPITER
 					d3.timer(function() {
 					    var delta = (Date.now() - t0);
@@ -375,8 +503,16 @@
 							var rotateP = (90 + delta * (1/orbitalPeriod)/20);
 							return "rotate("+ _data[5].orbitSide + (rotateP) + ")";
 							})
+
 				    	}
 				    )//END OF TIMER
+
+
+
+					////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 				    //ROTATION TIMER SATURN
 					d3.timer(function() {
@@ -389,6 +525,13 @@
 				    	}
 				    )//END OF TIMER
 
+
+
+					////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 				    //ROTATION TIMER URANUS
 					d3.timer(function() {
 					    var delta = (Date.now() - t0);
@@ -399,6 +542,13 @@
 							})
 				    	}
 				    )//END OF TIMER
+
+
+
+
+					////////////////////////////////////////////////////////////////////////////////////
+
+
 
 				    //ROTATION TIMER NEPTUNE
 					d3.timer(function() {
