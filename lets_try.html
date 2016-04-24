@@ -4,8 +4,114 @@
 		<title>KV</title>
 		<link rel="stylesheet" type="text/css" href="css_script.css">
 		<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
 	</head>
 	<body>
+		<span class="planetInfo" id="planetInfo0">
+			<b>The Sun:</b><br><br> 
+			Radius: 109xEarth's<br>
+			Mass: 1,988,500 * 10<sup>24</sup><br>
+			Volume: 1,412,000 * 10<sup>12</sup> km<sup>3</sup><br>
+			Core temperature: 27,000,000 <sup>o</sup>C<br>
+			Surface temperature: 10,000,000 <sup>o</sup>C<br>
+		</span>
+
+		<span class="planetInfo" id="planetInfo1">
+			<b>Mercury:</b><br><br>
+			The closest planet to the sun.<br>
+			Mercury is only a bit larger than Earth's moon.<br>
+			Named for: Messenger of the Roman gods.<br>
+			Diameter: 3,031 miles (4,878 km)<br>
+			Orbit: 88 Earth days<br>
+			Day: 58.6 Earth days<br>
+		</span>
+
+		<span class="planetInfo" id="planetInfo2">
+			<b>Venus:</b><br><br>
+			The second planet from the sun.<br>
+			The Hottest planet.<br>
+			Discovery: Known to the ancients and visible to the naked eye.<br>
+			Named for: Roman goddess of love and beauty.<br>
+			Diameter: 7,521 miles (12,104 km)<br>
+			Orbit: 225 Earth days<br>
+			Day: 241 Earth days<br>
+		</span>
+
+		<span class="planetInfo" id="planetInfo3">
+			<b>Earth:</b><br><br>
+			The third planet from the sun.<br>
+			Two-thirds of the planet covered by ocean.<br>
+			Diameter: 7,926 miles (12,760 km)<br>
+			Orbit: 365.24 days<br>
+			Day: 23 hours, 56 minutes<br>	
+		</span>
+
+		<span class="planetInfo" id="planetInfo4">
+			<b>Mars:</b><br><br>
+			The fourth planet from the sun.<br>
+			The dust, an iron oxide, gives the planet its reddish cast.<br>
+			Discovery: Known to the ancients and visible to the naked eye.<br>
+			Named for: Roman god of war.<br>
+			Diameter: 4,217 miles (6,787 km)<br>
+			Orbit: 687 Earth days<br>
+			Day: Just more than one Earth day (24 hours, 37 minutes)<br>
+		</span>
+
+		<span class="planetInfo" id="planetInfo5">
+			<b>Jupiter:</b><br><br>
+			The fifth planet from the sun.<br>
+			Jupiter is huge and is the most massive planet in our solar system.<br>
+			Discovery: Known to the ancients and visible to the naked eye.<br>
+			Named for: Ruler of the Roman gods.<br>
+			Diameter: 86,881 miles (139,822 km)<br>
+			Orbit: 11.9 Earth years<br>
+			Day: 9.8 Earth hours<br>
+		</span>
+
+		<span class="planetInfo" id="planetInfo6">
+			<b>Saturn:</b><br><br>
+			The sixth planet from the sun is known most for its rings.<br>
+			When Galileo Galilei first studied Saturn in the early 1600s, he thought it was an object with three parts.<br>
+			Discovery: Known to the ancients and visible to the naked eye.<br>
+			Named for: Roman god of agriculture.<br>
+			Diameter: 74,900 miles (120,500 km)<br>
+			Orbit: 29.5 Earth years<br>
+			Day: About 10.5 Earth hours<br>
+		</span>
+
+		<span class="planetInfo" id="planetInfo7">
+			<b>Uranus:</b><br><br>
+			The seventh planet from the sun.<br>
+			It's the only giant planet whose equator is nearly at right angles to its orbit - it basically orbits on its side.<br>
+			Astronomers think the planet collided with some other planet-size object long ago, causing the tilt.<br>
+			Discovery: 1781 by William Herschel (was thought previously to be a star).<br>
+			Named for: Personification of heaven in ancient myth.<br>
+			Diameter: 31,763 miles (51,120 km)<br>
+			Orbit: 84 Earth years<br>
+			Day: 18 Earth hours<br>
+		</span>
+
+		<span class="planetInfo" id="planetInfo8">
+			<b>Neptune:</b><br><br>
+			The eighth planet from the sun.<br>
+			Neptune is known for strong winds - sometimes faster than the speed of sound.<br>
+			Neptune is far out and cold. The planet is more than 30 times as far from the sun as Earth.<br>
+			Neptune is about 17 times as massive as Earth.<br>
+			Discovery: 1846<br>
+			Named for: Roman god of water<br>
+			Diameter: 30,775 miles (49,530 km)<br>
+			Orbit: 165 Earth years<br>
+			Day: 19 Earth hours<br>
+		</span>
+
+
+
+		<input type="range" min="0.3" max="5" step="0.05" value="1" 
+		   onInput="scaleSlider(this.value)" id="slider" orient="vertical">
+
+		  
+
 		<input type="submit" value="Distance" id="btn1" class="btn" onclick="fsetDistance()"></input>
 		<input type="submit" value="Size" id="btn2" class="btn" onclick="fSetSize()"></input>
 		<input type="submit" value="Custom" id="btn3" class="btn" onclick="fsetCustom()"></input>
@@ -64,10 +170,75 @@
        				<image x="0" y="0" width="70" height="70" xlink:href="neptune.png" id="img9"></image>
         		</pattern>
         	</defs>
+
+
+
+
+        	<defs id="mdef10">
+        		<pattern id="imgBigger0" x="0" y="0" height="1" width="1">
+       				<image x="0" y="0" width="600" height="600" xlink:href="sun.png" id="img10"></image>
+        		</pattern>
+        	</defs>
+
+        	<defs id="mdef11">
+        		<pattern id="imgBigger1" x="0" y="0" height="1" width="1">
+       				<image x="0" y="0" width="600" height="600" xlink:href="mercury.png" id="img11"></image>
+        		</pattern>
+        	</defs>
+
+        	<defs id="mdef12">
+        		<pattern id="imgBigger2" x="0" y="0" height="1" width="1">
+       				<image x="0" y="0" width="600" height="600" xlink:href="venus.png" id="img12"></image>
+        		</pattern>
+        	</defs>
+
+        	<defs id="mdef14">
+        		<pattern id="imgBigger3" x="0" y="0" height="1" width="1">
+       				<image x="0" y="0" width="600" height="600" xlink:href="earth.png" id="img13"></image>
+        		</pattern>
+        	</defs>
+
+        	<defs id="mdef15">
+        		<pattern id="imgBigger4" x="0" y="0" height="1" width="1">
+       				<image x="0" y="0" width="600" height="600" xlink:href="mars.png" id="img14"></image>
+        		</pattern>
+        	</defs>
+
+        	<defs id="mdef16">
+        		<pattern id="imgBigger5" x="0" y="0" height="1" width="1">
+       				<image x="0" y="0" width="600" height="600" xlink:href="jupiter.png" id="img15"></image>
+        		</pattern>
+        	</defs>
+
+        	<defs id="mdef17">
+        		<pattern id="imgBigger6" x="0" y="0" height="1" width="1">
+       				<image x="0" y="0" width="540" height="600" xlink:href="saturn.png" id="img16"></image>
+        		</pattern>
+        	</defs>
+
+        	<defs id="mdef18">
+        		<pattern id="imgBigger7" x="0" y="0" height="1" width="1">
+       				<image x="0" y="0" width="600" height="600" xlink:href="uranus.png" id="img17"></image>
+        		</pattern>
+        	</defs>
+
+        	<defs id="mdef19">
+        		<pattern id="imgBigger8" x="0" y="0" height="1" width="1">
+       				<image x="0" y="0" width="600" height="600" xlink:href="neptune.png" id="img18"></image>
+        		</pattern>
+        	</defs>
+
 		</div>
 
-
 		<script type="text/javascript">
+
+			d3.selection.prototype.moveToFront = function() {
+			  return this.each(function(){
+			    this.parentNode.appendChild(this);
+			  });
+			};
+
+
 			//DATA
 			var Data = [ {"name": "sun", "radius": 696342},
 						 {"name": "Mercury", "radius": 2439.64, "sunDistance": 57, "orbitalperiod": 0.61519726, "orbitSide": "+"},
@@ -100,15 +271,15 @@
 						 {"name": "Neptune", "radius": 18.51471515387266, "sunDistance": 1200, "orbitalperiod":164.79132, "orbitSide": "-"}
 						];
 
-			var customData = [ {"name": "sun", "radius": 696342},
-						 {"name": "Mercury", "radius": 2439.64, "sunDistance": 57, "orbitalperiod": 0.61519726, "orbitSide": "+"},
-						 {"name": "Venus", "radius": 6051.59, "sunDistance": 108, "orbitalperiod": 0.61519726, "orbitSide": "+"},
-						 {"name": "Earth", "radius": 6378.1, "sunDistance": 150, "orbitalperiod": 0.61519726, "orbitSide": "-"},
-						 {"name": "Mars", "radius": 3397.00, "sunDistance": 228, "orbitalperiod": 1.8808476, "orbitSide": "-"},
-						 {"name": "Jupiter", "radius": 71492.68, "sunDistance": 779, "orbitalperiod": 11.862615, "orbitSide": "+"},
-						 {"name": "Saturn", "radius": 60267.14, "sunDistance": 1043, "orbitalperiod": 29.447498, "orbitSide": "+"},
-						 {"name": "Uranus", "radius": 25557.25, "sunDistance": 2088, "orbitalperiod": 84.016846, "orbitSide": "-"},
-						 {"name": "Neptune", "radius": 24766.36, "sunDistance": 4050, "orbitalperiod":164.79132, "orbitSide": "-"}
+			var customData = [ {"name": "sun", "radius": 50},
+						 {"name": "Mercury", "radius": 10, "sunDistance": 60, "orbitalperiod": 0.61519726, "orbitSide": "+"},
+						 {"name": "Venus", "radius": 15, "sunDistance": 80, "orbitalperiod": 0.61519726, "orbitSide": "+"},
+						 {"name": "Earth", "radius": 15, "sunDistance": 110, "orbitalperiod": 0.61519726, "orbitSide": "-"},
+						 {"name": "Mars", "radius": 12, "sunDistance": 228, "orbitalperiod": 1.8808476, "orbitSide": "-"},
+						 {"name": "Jupiter", "radius": 40, "sunDistance": 300, "orbitalperiod": 11.862615, "orbitSide": "+"},
+						 {"name": "Saturn", "radius": 45, "sunDistance": 400, "orbitalperiod": 29.447498, "orbitSide": "+"},
+						 {"name": "Uranus", "radius": 30, "sunDistance": 500, "orbitalperiod": 84.016846, "orbitSide": "-"},
+						 {"name": "Neptune", "radius": 30, "sunDistance": 600, "orbitalperiod":164.79132, "orbitSide": "-"}
 						];
 
 			var satelits = [ {"name": "Moon", "orbitalPeriod": 27.321582},
@@ -136,6 +307,11 @@
 			var width = 1800;
 			var height = 900;
 			var t0 = Date.now();
+			var stopTimer = 0;
+
+			var div = d3.select("body").append("div")	
+		    .attr("class", "tooltip")				
+		    .style("opacity", 0);
 
 			var zoom = d3.behavior.zoom()
 		    .scaleExtent([0.1, 10])
@@ -150,11 +326,14 @@
 				.call(zoom);
 
 			var sunContainer = svgItem.append("g")
-				.attr("class", sunContainer);
+				.attr("class", sunContainer)
+				.attr("fill", "none");
+
 
 			var container = sunContainer.append("g")
 				.attr("class", "container")
-				.attr("transform", "translate(" + width/2 + "," + height/2 + ")");
+				.attr("transform", "translate(" + width/2 + "," + height/2 + ")")
+				.attr("fill", "none");
 
 			for(var i = 0; i < (width / 10); i++) {
 				    createUniverse();
@@ -162,7 +341,7 @@
 
 			makeEverything(distanceData);
 
-			function makeEverything(_data){				//MAKE ONE TIMER function timers(dataBroj, Mercury){do stuff}
+			function makeEverything(_data){
 
 				for(var i = 0; i < 9; i++){
 					d3.select("#img"+(i+1))
@@ -171,7 +350,7 @@
 				}
 				
 				//ADD SUN
-				var j;
+				
 				var sun = sunContainer.append("g")
 					.append("circle")
 					.attr("class", "sun")
@@ -179,11 +358,26 @@
 					.attr("cx", width/2)
 					.attr("cy", height/2)
 					.style("fill", "url(#imageSun)")
-					.on('click', function(d,i){  });
+					.on("click", function(){
+						showTooltip(_data, 0);
+					});
+					
+						
+
 
 
 					////////////////////////////////////////////////////////////////////////////////////
 
+
+					//ADD MERCURY'S ORBITAL
+				container.append("g")
+					.append("circle")
+					.attr("class", "orbitals")
+					.attr("id", "o1")
+					.attr("r", _data[1].sunDistance)
+					.attr("cx", 0)
+					.style("fill", "none")
+					.style("stroke", "#cccccc");
 
 
 				//ADD MERCURY
@@ -193,22 +387,27 @@
 					.attr("id", "1")
 					.attr("r", _data[1].radius)
 					.attr("cx", _data[1].sunDistance)
-					.style("fill", "url(#imageMercury)");
+					.style("fill", "url(#imageMercury)")
+					.on("click", function(){
+						showTooltip(_data, 1);
+					});
 
-				//ADD MERCURY'S ORBITAL
-				container.append("g")
-					.append("circle")
-					.attr("class", "orbitals")
-					.attr("id", "firstOrbital")
-					.attr("r", _data[1].sunDistance)
-					.attr("cx", 0)
-					.style("fill", "none")
-					.style("stroke", "white");
+				
 
 
 
 					////////////////////////////////////////////////////////////////////////////////////
 
+
+					//ADD VENUS'S ORBITAL
+				container.append("g")
+					.append("circle")
+					.attr("class", "orbitals")
+					.attr("id", "o2")
+					.attr("r", _data[2].sunDistance)
+					.attr("cx", 0)
+					.style("fill", "none")
+					.style("stroke", "#cccccc");
 
 
 
@@ -219,22 +418,27 @@
 					.attr("id", "2")
 					.attr("r", _data[2].radius)
 					.attr("cx", _data[2].sunDistance)
-					.style("fill", "url(#imageVenus)");
+					.style("fill", "url(#imageVenus)")
+					.on("click", function(){
+						showTooltip(_data, 2);
+					});
 
-				//ADD VENUS'S ORBITAL
-				container.append("g")
-					.append("circle")
-					.attr("class", "orbitals")
-					.attr("id", "secondOrbital")
-					.attr("r", _data[2].sunDistance)
-					.attr("cx", 0)
-					.style("fill", "none")
-					.style("stroke", "white");
+				
 
 
 
 					////////////////////////////////////////////////////////////////////////////////////
 
+
+				//ADD EARTH'S ORBITAL
+				container.append("g")
+					.append("circle")
+					.attr("class", "orbitals")
+					.attr("id", "o3")
+					.attr("r", _data[3].sunDistance)
+					.attr("cx", 0)
+					.style("fill", "none")
+					.style("stroke", "#cccccc");
 
 
 
@@ -245,42 +449,30 @@
 					.attr("id", "3")
 					.attr("r", _data[3].radius)
 					.attr("cx", _data[3].sunDistance)
-					.style("fill", "url(#imageEarth)");
+					.style("fill", "url(#imageEarth)")
+					.on("click", function(){
+						showTooltip(_data, 3);
+					});
 
-				var earthSatelite = Earth.append("g")
-					.attr("class", "SateliteContainer")
-					.attr("transform", "translate(" + _data[3].sunDistance + ","+ 0 +")");
 
-				//add moon
-				earthSatelite.append("g")
-					.append("circle")
-					.attr("class", "satelits")
-					.attr("id", "s1")
-					.attr("r", 0.5)
-					.attr("cx", _data[3].radius + 1)
-					.style("fill", "gray");
+					
 
-				//add moon's orbital
-				earthSatelite.append("g")
-					.append("circle")
-					.attr("class", "satelitsOrbital")
-					.attr("r", _data[3].radius + 1)
-					.style("fill", "none")
-					.style("stroke", "white");
 
-				//ADD EARTH'S ORBITAL
-				container.append("g")
-					.append("circle")
-					.attr("class", "orbitals")
-					.attr("id", "thirdOrbital")
-					.attr("r", _data[3].sunDistance)
-					.attr("cx", 0)
-					.style("fill", "none")
-					.style("stroke", "white");
+
 
 
 
 					////////////////////////////////////////////////////////////////////////////////////
+
+				//ADD MARS'S ORBITAL
+				container.append("g")
+					.append("circle")
+					.attr("class", "orbitals")
+					.attr("id", "o4")
+					.attr("r", _data[4].sunDistance)
+					.attr("cx", 0)
+					.style("fill", "none")
+					.style("stroke", "#cccccc");
 
 
 
@@ -292,21 +484,30 @@
 					.attr("id", "4")
 					.attr("r", _data[4].radius)
 					.attr("cx", _data[4].sunDistance)
-					.style("fill", "url(#imageMars)");
+					.style("fill", "url(#imageMars)")
+					.on("click", function(){
+						showTooltip(_data, 4);
+					});
 
-				//ADD MARS'S ORBITAL
-				container.append("g")
-					.append("circle")
-					.attr("class", "orbitals")
-					.attr("id", "thirdOrbital")
-					.attr("r", _data[4].sunDistance)
-					.attr("cx", 0)
-					.style("fill", "none")
-					.style("stroke", "white");
+				
+
+
 
 
 
 					////////////////////////////////////////////////////////////////////////////////////
+
+
+
+				//ADD JUPITER'S ORBITAL
+				container.append("g")
+					.append("circle")
+					.attr("class", "orbitals")
+					.attr("id", "o5")
+					.attr("r", _data[5].sunDistance)
+					.attr("cx", 0)
+					.style("fill", "none")
+					.style("stroke", "#cccccc");
 
 
 
@@ -318,18 +519,13 @@
 					.attr("id", "5")
 					.attr("r", _data[5].radius)
 					.attr("cx", _data[5].sunDistance)
-					.style("fill", "url(#imageJupiter)");
+					.style("fill", "url(#imageJupiter)")
+					.on("click", function(){
+						showTooltip(_data, 5);
+					});
 
 				
-				//ADD JUPITER'S ORBITAL
-				container.append("g")
-					.append("circle")
-					.attr("class", "orbitals")
-					.attr("id", "fourthOrbital")
-					.attr("r", _data[5].sunDistance)
-					.attr("cx", 0)
-					.style("fill", "none")
-					.style("stroke", "white");
+				
 
 
 
@@ -337,7 +533,15 @@
 
 					////////////////////////////////////////////////////////////////////////////////////
 
-
+				//ADD SATURN'S ORBITAL
+					container.append("g")
+					.append("circle")
+					.attr("class", "orbitals")
+					.attr("id", "o6")
+					.attr("r", _data[6].sunDistance)
+					.attr("cx", 0)
+					.style("fill", "none")
+					.style("stroke", "#cccccc");
 
 
 
@@ -348,24 +552,27 @@
 					.attr("id", "6")
 					.attr("r", _data[6].radius)
 					.attr("cx", _data[6].sunDistance)
-					.style("fill", "url(#imageSaturn)");
+					.style("fill", "url(#imageSaturn)")
+					.on("click", function(){
+						showTooltip(_data, 6);
+					});
 
 
-				//ADD SATURN'S ORBITAL
-					container.append("g")
-					.append("circle")
-					.attr("class", "orbitals")
-					.attr("id", "sixedOrbital")
-					.attr("r", _data[6].sunDistance)
-					.attr("cx", 0)
-					.style("fill", "none")
-					.style("stroke", "white");
+				
 
 
 
 					////////////////////////////////////////////////////////////////////////////////////
 
-
+					//URANUS'S ORBITAL
+					container.append("g")
+					.append("circle")
+					.attr("class", "orbitals")
+					.attr("id", "o7")
+					.attr("r", _data[7].sunDistance)
+					.attr("cx", 0)
+					.style("fill", "none")
+					.style("stroke", "white");
 
 
 				//ADD URANUS
@@ -375,17 +582,12 @@
 					.attr("id", "7")
 					.attr("r", _data[7].radius)
 					.attr("cx", _data[7].sunDistance)
-					.style("fill", "url(#imageUranus)");
+					.style("fill", "url(#imageUranus)")
+					.on("click", function(){
+						showTooltip(_data, 7);
+					});
 
-				//URANUS'S ORBITAL
-				container.append("g")
-					.append("circle")
-					.attr("class", "orbitals")
-					.attr("id", "seventhOrbital")
-					.attr("r", _data[7].sunDistance)
-					.attr("cx", 0)
-					.style("fill", "none")
-					.style("stroke", "white");
+				
 
 
 
@@ -393,6 +595,15 @@
 
 
 
+					//ADD NEPTUN'S ORBITAL
+					container.append("g")
+					.append("circle")
+					.attr("class", "orbitals")
+					.attr("id", "o8")
+					.attr("r", _data[8].sunDistance)
+					.attr("cx", 0)
+					.style("fill", "none")
+					.style("stroke", "white");
 
 
 				//ADD NEPTUNE
@@ -402,171 +613,115 @@
 					.attr("id", "8")
 					.attr("r", _data[8].radius)
 					.attr("cx", _data[8].sunDistance)
-					.style("fill", "url(#imageNeptune)");
+					.style("fill", "url(#imageNeptune)")
+					.on("click", function(){
+						showTooltip(_data, 8);
+					});
 
-				//ADD NEPTUN'S ORBITAL
-				container.append("g")
-					.append("circle")
-					.attr("class", "orbitals")
-					.attr("id", "eightOrbital")
-					.attr("r", _data[8].sunDistance)
-					.attr("cx", 0)
-					.style("fill", "none")
-					.style("stroke", "white");
+
+
+					/*var neptuneRect = sunContainer.append("rect")
+						.attr("x", _data[8].sunDistance/2)
+						.attr("y", _data[8].sunDistance/4)
+						.attr("width", _data[8].sunDistance*2)
+						.attr("height", _data[8].sunDistance)
+						.style("fill", "none");
+
+					var NewPlanet = neptuneRect.append("g")
+						.append("circle")
+						.attr("class", "planets")
+						.attr("id", "New")
+						.attr("r", _data[8].radius)
+						.attr("cx", _data[8].sunDistance)
+						.style("fill", "red")
+						.on("click", function(){
+							showTooltip(_data, 8);
+						});
+					
+					
+						timers2(neptuneRect, 8, _data);*/
+
+					////////////////////////////////////////////////////////////////////////////////////
+
+				
+					startTimers();
+					
+
+					////////////////////////////////////////////////////////////////////////////////////
+
+
+
+					function startTimers(){
+						stopTimer = 0;
+
+						timers(Mercury, 1, _data);
+						timers(Venus, 2, _data);
+						timers(Earth, 3, _data);
+						timers(Mars, 4, _data);
+						timers(Jupiter, 5, _data);
+						timers(Saturn, 6, _data);
+						timers(Uranus, 7, _data);
+						timers(Neptune, 8, _data);
+					}
+
+					////////////////////////////////////////////////////////////////////////////////////
+
+			} //END OF FUNCTION
+
+			function timers(planetName, planetIndex, _data){
+					d3.timer(function() {
+					if(stopTimer == 1){
+						return true
+					}
+
+				    var delta = (Date.now() - t0);
+				    planetName.attr("transform", function(d,t) {
+				    	var orbitalPeriod = _data[planetIndex].orbitalperiod;
+						var rotateP = (90 + delta * (1/orbitalPeriod)/20);
+						return "rotate("+ _data[planetIndex].orbitSide + (rotateP)+ ")";
+						})
+			    	}
+			    )//END OF TIMER
+				}//END OF FUNCTION
+
+
+
+
+				function timers2(rectName, planetIndex, _data){
+					d3.timer(function() {
+				    var delta = (Date.now() - t0);
+				    rectName.attr("transform", function(d,t) {
+				    	var orbitalPeriod = _data[planetIndex].orbitalperiod;
+						var rotateP = (90 + delta * (1/orbitalPeriod)/20);
+						return "rotate("+ (rotateP)  + ","+ _data[8].sunDistance +","+ _data[8].sunDistance/2 +")";
+						})
+			    	}
+			    )//END OF TIMER
+				}//END OF FUNCTION
+
 
 
 
 
 					////////////////////////////////////////////////////////////////////////////////////
 
+			function showTooltip(_data, idNum)
+				{
+					d3.select(".tooltip").transition()	
+                	.duration(400)		
+                	.style("opacity", .9);
 
+                	d3.select(".tooltip").html(_data[idNum].name)
+                		.style("left", (d3.event.pageX) + "px")		
+                		.style("top", (d3.event.pageY - 28) + "px");
 
+                	d3.select(".tooltip").transition()
+                	.delay(5000)	
+                	.duration(400)		
+                	.style("opacity", 0);
 
+				}
 
-					//ROTATION TIMER MERCURY
-					d3.timer(function() {
-					    var delta = (Date.now() - t0);
-					    Mercury.attr("transform", function(d,t) {
-					    	var orbitalPeriod = _data[1].orbitalperiod;
-							var rotateP = (90 + delta * (1/orbitalPeriod)/20);
-							return "rotate("+ _data[1].orbitSide + (rotateP) + ")";
-							})
-				    	}
-				    )//END OF TIMER
-
-
-
-					////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-				    //ROTATION TIMER VENUS
-					d3.timer(function() {
-					    var delta = (Date.now() - t0);
-					    Venus.attr("transform", function(d,t) {
-					    	var orbitalPeriod = _data[2].orbitalperiod;
-							var rotateP = (90 + delta * (1/orbitalPeriod)/20);
-							return "rotate("+ _data[2].orbitSide + (rotateP) + ")";
-							})
-				    	}
-				    )//END OF TIMER
-
-
-
-					////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-				    //ROTATION TIMER EARTH
-					d3.timer(function() {
-					    var delta = (Date.now() - t0);
-					    Earth.attr("transform", function(d,t) {
-					    	var orbitalPeriod = _data[3].orbitalperiod;
-							var rotateP = (90 + delta * (1/orbitalPeriod)/20);
-							return "rotate("+ _data[3].orbitSide + (rotateP) + ")";
-							})
-				    	}
-				    )//END OF TIMER
-
-
-
-					////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-				    //ROTATION TIMER MARS
-					d3.timer(function() {
-					    var delta = (Date.now() - t0);
-					    Mars.attr("transform", function(d,t) {
-					    	var orbitalPeriod = _data[4].orbitalperiod;
-							var rotateP = (90 + delta * (1/orbitalPeriod)/20);
-							return "rotate("+ _data[4].orbitSide + (rotateP) + ")";
-							})
-				    	}
-				    )//END OF TIMER
-
-
-
-					////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-				    //ROTATION TIMER JUPITER
-					d3.timer(function() {
-					    var delta = (Date.now() - t0);
-					    Jupiter.attr("transform", function(d,t) {
-					    	var orbitalPeriod = _data[5].orbitalperiod;
-							var rotateP = (90 + delta * (1/orbitalPeriod)/20);
-							return "rotate("+ _data[5].orbitSide + (rotateP) + ")";
-							})
-
-				    	}
-				    )//END OF TIMER
-
-
-
-					////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-				    //ROTATION TIMER SATURN
-					d3.timer(function() {
-					    var delta = (Date.now() - t0);
-					    Saturn.attr("transform", function(d,t) {
-					    	var orbitalPeriod = _data[6].orbitalperiod;
-							var rotateP = (90 + delta * (1/orbitalPeriod)/20);
-							return "rotate("+ _data[6].orbitSide + (rotateP) + ")";
-							})
-				    	}
-				    )//END OF TIMER
-
-
-
-					////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-				    //ROTATION TIMER URANUS
-					d3.timer(function() {
-					    var delta = (Date.now() - t0);
-					    Uranus.attr("transform", function(d,t) {
-					    	var orbitalPeriod = _data[7].orbitalperiod;
-							var rotateP = (90 + delta * (1/orbitalPeriod)/20);
-							return "rotate("+ _data[7].orbitSide + (rotateP) + ")";
-							})
-				    	}
-				    )//END OF TIMER
-
-
-
-
-					////////////////////////////////////////////////////////////////////////////////////
-
-
-
-				    //ROTATION TIMER NEPTUNE
-					d3.timer(function() {
-					    var delta = (Date.now() - t0);
-					    Neptune.attr("transform", function(d,t) {
-					    	var orbitalPeriod = _data[8].orbitalperiod;
-							var rotateP = (90 + delta * (1/orbitalPeriod)/20);
-							return "rotate("+ _data[8].orbitSide + (rotateP) + ")";
-							})
-				    	}
-				    )//END OF TIMER
-
-
-
-
-
-
-			}
 
 
 			function createUniverse() {
@@ -586,23 +741,147 @@
 			}
 
 			function fsetDistance(){
-				d3.selectAll(".sun").remove();
-				d3.selectAll(".orbitals").remove();
-				d3.selectAll(".planets").remove();
-				makeEverything(distanceData);
+				d3.selectAll(".sun").transition().duration(750).style("opacity", "0").remove();
+				d3.selectAll(".orbitals").transition().duration(750).style("opacity", "0").remove();
+				d3.selectAll(".planets").transition().duration(750).style("opacity", "0").remove();
+				makeEverything(distanceData).transition().delay(750).duration(750);
 			}
 
 			function fSetSize(){
-				d3.selectAll(".sun").remove();
-				d3.selectAll(".orbitals").remove();
-				d3.selectAll(".planets").remove();
-				makeEverything(sizeData);
+				d3.selectAll(".sun").transition().duration(750).style("opacity", "0").remove();
+				d3.selectAll(".orbitals").transition().duration(750).style("opacity", "0").remove();
+				d3.selectAll(".planets").transition().duration(750).style("opacity", "0").remove();
+				makeEverything(sizeData).transition().delay(750).duration(750);
 			}
 
 			function fsetCustom(){
+				d3.selectAll(".sun").transition().duration(750).style("opacity", "0").remove();
+				d3.selectAll(".orbitals").transition().duration(750).style("opacity", "0").remove();
+				d3.selectAll(".planets").transition().duration(750).style("opacity", "0").remove();
+				makeEverything(customData).transition().delay(750).duration(750);
+			}
+
+
+			function planetSpan(id){
+
+				d3.selectAll(".planets").transition()
+				.duration(500)
+				.style("opacity", 0);
+
+				d3.selectAll(".orbitals").transition()
+				.duration(500)
+				.style("opacity", 0);
+
+				d3.select(".sun").transition()
+				.duration(500)
+				.style("opacity", 0);
+
+				d3.selectAll(".span").transition()
+				.duration(500)
+				.style("visibility", "hidden");
+
+				d3.selectAll(".btn").transition()
+				.duration(500)
+				.style("visibility", "hidden");
+
+
+				////////////////////////////////////////////////////////////////////////////////////
+
+				var bigPlanet = svgItem.append("g")
+				.append("circle")
+				.attr("class", "bigPlanets")
+				.attr("id", "57")
+				.attr("r", "300")
+				.attr("cx", function(){
+					return (400);
+				})
+				.attr("cy", function(){
+					return (height/2);
+				})
+				.style("fill", "url(#imgBigger"+id+")")
+				.style("opacity", "0")
+				.on("click", function(){backToNormal()});
+
+				bigPlanet.transition()
+				.delay(500)
+				.duration(750)
+				.style("opacity", 1);
+
+				d3.select("#planetInfo"+id).transition()
+				.delay(500)
+				.duration(750)
+				.style("opacity", "1");
+
+				d3.select("#planetInfo"+id)
+                	.style("left", width/2 + "px")		
+                	.style("top", (height/4 + 50) + "px");
+
+
+				////////////////////////////////////////////////////////////////////////////////////
+
+
+				function backToNormal(){
+
+					d3.select(".bigPlanets").transition()
+					.duration(500)
+					.style("opacity", "0");
+					d3.select(".bigPlanets")
+					.transition()
+					.delay(500)
+					.remove();
+
+					d3.select("#planetInfo"+id).transition()
+					.duration(500)
+					.style("opacity", "0");
+						
+
+					d3.selectAll(".planets").transition()
+					.delay(500)
+					.duration(500)
+					.style("opacity", 1);
+
+					d3.selectAll(".orbitals").transition()
+					.delay(500)
+					.duration(500)
+					.style("opacity", 1);
+
+					d3.select(".sun").transition()
+					.delay(500)
+					.duration(500)
+					.style("opacity", 1);
+
+					d3.selectAll(".span").transition()
+					.delay(500)
+					.duration(500)
+					.style("visibility", "visible");
+
+					d3.selectAll(".btn").transition()
+					.delay(500)
+					.duration(500)
+					.style("visibility", "visible");
+				}
+
 
 			}
 
+
+			function scaleSlider(scaleValue){
+				sunContainer.attr("transform", "translate(" + 1000 + "," + 0 + "),scale(" + scaleValue + ")");
+			}
+
 		</script>
+
+		<div class="links">
+			<span class="span" id="spanSun" onclick="planetSpan('0')">Sun</span>
+			<span class="span" id="spanMercury" onclick="planetSpan('1')">Mercury</span>
+			<span class="span" id="spanVenus" onclick="planetSpan('2')">Venus</span>
+			<span class="span" id="spanEarth" onclick="planetSpan('3')">Earth</span>
+			<span class="span" id="spanMars" onclick="planetSpan('4')">Mars</span>
+			<span class="span" id="spanJupiter" onclick="planetSpan('5')">Jupiter</span>
+			<span class="span" id="spanSaturn" onclick="planetSpan('6')">Saturn</span>
+			<span class="span" id="spanUranus" onclick="planetSpan('7')">Uranus</span>
+			<span class="span" id="spanNeptune" onclick="planetSpan('8')">Neptune</span>
+		</div>
+
 	</body>
 </html>
