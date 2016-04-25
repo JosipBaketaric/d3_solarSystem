@@ -4,7 +4,20 @@
 		<title>KV</title>
 		<link rel="stylesheet" type="text/css" href="css_script.css">
 		<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+		<script type="text/javascript">
+			function getOffset( el ) {
+			    var _x = 0;
+			    var _y = 0;
+			    while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
+			        _x += el.offsetLeft - el.scrollLeft;
+			        _y += el.offsetTop - el.scrollTop;
+			        el = el.offsetParent;
+			    }
+			    return { top: _y, left: _x };
+			}
+
+		</script>
 
 	</head>
 	<body>
@@ -107,14 +120,21 @@
 
 
 
-		<input type="range" min="0.3" max="5" step="0.05" value="1" 
-		   onInput="scaleSlider(this.value)" id="slider" orient="vertical">
+		<span id="spanBarChart">
+			Planets size ratio
+		</span>
+
+
 
 		  
 
 		<input type="submit" value="Distance" id="btn1" class="btn" onclick="fsetDistance()"></input>
 		<input type="submit" value="Size" id="btn2" class="btn" onclick="fSetSize()"></input>
 		<input type="submit" value="Custom" id="btn3" class="btn" onclick="fsetCustom()"></input>
+		<input type="submit" value="Charts" id="btn4" class="btn" onclick="fshowStatistics()"></input>
+
+		<img src="go_back.png" height="50px", width="50px" id="btn5" onclick="goBackFromStatistics()">
+
 		<div class="patterns" id="sunPattern">
 	      	<svg class="svgClassImg" width="1" height="1">
       		<defs id="mdef1">
@@ -231,14 +251,6 @@
 		</div>
 
 		<script type="text/javascript">
-
-			d3.selection.prototype.moveToFront = function() {
-			  return this.each(function(){
-			    this.parentNode.appendChild(this);
-			  });
-			};
-
-
 			//DATA
 			var Data = [ {"name": "sun", "radius": 696342},
 						 {"name": "Mercury", "radius": 2439.64, "sunDistance": 57, "orbitalperiod": 0.61519726, "orbitSide": "+"},
@@ -311,6 +323,10 @@
 
 			var div = d3.select("body").append("div")	
 		    .attr("class", "tooltip")				
+		    .style("opacity", 0);
+
+		    var div = d3.select("body").append("div")	
+		    .attr("class", "Charttooltip")				
 		    .style("opacity", 0);
 
 			var zoom = d3.behavior.zoom()
@@ -620,7 +636,8 @@
 
 
 
-					/*var neptuneRect = sunContainer.append("rect")
+					/*
+					var neptuneRect = sunContainer.append("rect")
 						.attr("x", _data[8].sunDistance/2)
 						.attr("y", _data[8].sunDistance/4)
 						.attr("width", _data[8].sunDistance*2)
@@ -639,7 +656,7 @@
 						});
 					
 					
-						timers2(neptuneRect, 8, _data);*/
+						timers2(d3.select(".rect1"), 8, _data);*/
 
 					////////////////////////////////////////////////////////////////////////////////////
 
@@ -678,7 +695,7 @@
 				    planetName.attr("transform", function(d,t) {
 				    	var orbitalPeriod = _data[planetIndex].orbitalperiod;
 						var rotateP = (90 + delta * (1/orbitalPeriod)/20);
-						return "rotate("+ _data[planetIndex].orbitSide + (rotateP)+ ")";
+						return "rotate("+ _data[planetIndex].orbitSide + (rotateP)+")";
 						})
 			    	}
 			    )//END OF TIMER
@@ -692,8 +709,8 @@
 				    var delta = (Date.now() - t0);
 				    rectName.attr("transform", function(d,t) {
 				    	var orbitalPeriod = _data[planetIndex].orbitalperiod;
-						var rotateP = (90 + delta * (1/orbitalPeriod)/20);
-						return "rotate("+ (rotateP)  + ","+ _data[8].sunDistance +","+ _data[8].sunDistance/2 +")";
+						var rotateP = (90 + delta * (1/orbitalPeriod)*5);
+						return "rotate("+ (rotateP)  + ","+ _data[8].sunDistance +","+ _data[8].sunDistance +")";
 						})
 			    	}
 			    )//END OF TIMER
@@ -744,7 +761,7 @@
 				d3.selectAll(".sun").transition().duration(750).style("opacity", "0").remove();
 				d3.selectAll(".orbitals").transition().duration(750).style("opacity", "0").remove();
 				d3.selectAll(".planets").transition().duration(750).style("opacity", "0").remove();
-				makeEverything(distanceData).transition().delay(750).duration(750);
+				makeEverything(distanceData);
 			}
 
 			function fSetSize(){
@@ -865,9 +882,98 @@
 			}
 
 
-			function scaleSlider(scaleValue){
-				sunContainer.attr("transform", "translate(" + 1000 + "," + 0 + "),scale(" + scaleValue + ")");
+
+
+
+			function fshowStatistics(){
+				
+				d3.selectAll(".sun").transition().duration(750).style("opacity", "0");
+				d3.selectAll(".orbitals").transition().duration(750).style("opacity", "0");
+				d3.selectAll(".planets").transition().duration(750).style("opacity", "0");
+
+				d3.selectAll(".span").transition().duration(750).style("opacity", "0");
+				d3.selectAll(".btn").transition().duration(750).style("opacity", "0");
+				d3.selectAll(".span").transition().delay(750).duration(750).style("visibility", "hidden");
+				d3.selectAll(".btn").transition().delay(750).duration(750).style("visibility", "hidden");
+
+				d3.select("#spanBarChart").transition().delay(750).duration(750).style("opacity","1");
+				d3.selectAll("#btn5").transition().duration(0).style("visibility", "visible").style("opacity", "0");
+				d3.selectAll("#btn5").transition().delay(750).duration(750).style("opacity", "1");
+
+
+				drawChart();
+				
+
+				function drawChart(){
+
+					var sizeScaled=[2.439, 6.051, 6.378, 3.397, 71.492, 60.267, 25.557, 24.766];
+					var distanceScaled = [57, 108, 150, 228, 779, 1043, 2088, 4050];
+					var sunRadius=696.342;
+
+					w = 1000;
+					h = 800;
+					var barPadding = 5;
+					paddingLeft = 400;
+
+		            svgItem.selectAll("rect").append("g").attr("class", "barChart")
+					   .data(distanceScaled)
+					   .enter()
+					   .append("rect")
+					   .attr("class", "bar")
+					   .attr("x", function(d, i) {
+					    var tempSize = 0;
+					    for(var count = 0; count < i; count++){
+					    	tempSize=tempSize + sizeScaled[count]*5 + barPadding;
+					    	}
+					    return	tempSize+width/5;
+						})
+					   .attr("y", function(d) {
+						    return (h - d/6);  //Height minus data value
+						})
+					   .attr("width", function(d,i){
+					   	return sizeScaled[i]*5;
+
+					   } )
+					   .attr("height", function(d) {
+						    return d/6;
+						})
+					   .style("opacity", "0")
+					   .on("click", function(d,i){
+					   		d3.select(".Charttooltip").transition()	
+		                	.duration(400)		
+		                	.style("opacity", .9);
+
+		                	d3.select(".Charttooltip").html(Data[i+1].name + ":<br/>" + "Size: " + sizeScaled[i] + "\nDistance from the sun: " + distanceScaled[i])
+		                		.style("left", (d3.event.pageX) + "px")		
+		                		.style("top", (d3.event.pageY - 28) + "px");
+
+		                	d3.select(".Charttooltip").transition()
+		                	.delay(5000)	
+		                	.duration(400)		
+		                	.style("opacity", 0);
+					   });
+
+					   d3.selectAll(".bar").transition().delay(750).duration(750).style("opacity","1");
+
+				}//drawChart
+			}//fshowStatistics
+
+			function goBackFromStatistics(){
+				d3.selectAll(".sun").transition().delay(750).duration(750).style("opacity", "1");
+				d3.selectAll(".orbitals").transition().delay(750).duration(750).style("opacity", "1");
+				d3.selectAll(".planets").transition().delay(750).duration(750).style("opacity", "1");
+				d3.selectAll(".span").style("visibility", "visible");
+				d3.selectAll(".btn").style("visibility", "visible");
+				d3.selectAll(".span").transition().delay(750).duration(750).style("opacity", "1");
+				d3.selectAll(".btn").transition().delay(750).duration(750).style("opacity", "1");
+
+				d3.select("#spanBarChart").transition().duration(750).style("opacity","0");
+				d3.selectAll("#btn5").transition().duration(750).style("visibility", "hidden");
+
+				d3.selectAll(".bar").transition().duration(750).style("opacity","0");
+				d3.selectAll(".bar").transition().delay(750).remove();
 			}
+
 
 		</script>
 
