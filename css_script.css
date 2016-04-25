@@ -172,7 +172,7 @@ body{
 	opacity: 0;
 	position: absolute;
 	text-align: center;
-	margin-left:40%;
+	margin-left:35%;
 }
 
 
@@ -182,7 +182,7 @@ body{
 .axis path,
 .axis line {
     fill: none;
-    stroke: black;
+    stroke: white;
     shape-rendering: crispEdges;
 }
 

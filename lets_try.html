@@ -121,7 +121,7 @@
 
 
 		<span id="spanBarChart">
-			Planets size ratio
+			Planets distance/size ratio
 		</span>
 
 
@@ -574,7 +574,6 @@
 					});
 
 
-				
 
 
 
@@ -635,33 +634,11 @@
 					});
 
 
-
-					/*
-					var neptuneRect = sunContainer.append("rect")
-						.attr("x", _data[8].sunDistance/2)
-						.attr("y", _data[8].sunDistance/4)
-						.attr("width", _data[8].sunDistance*2)
-						.attr("height", _data[8].sunDistance)
-						.style("fill", "none");
-
-					var NewPlanet = neptuneRect.append("g")
-						.append("circle")
-						.attr("class", "planets")
-						.attr("id", "New")
-						.attr("r", _data[8].radius)
-						.attr("cx", _data[8].sunDistance)
-						.style("fill", "red")
-						.on("click", function(){
-							showTooltip(_data, 8);
-						});
-					
-					
-						timers2(d3.select(".rect1"), 8, _data);*/
-
 					////////////////////////////////////////////////////////////////////////////////////
 
 				
 					startTimers();
+
 					
 
 					////////////////////////////////////////////////////////////////////////////////////
@@ -703,24 +680,13 @@
 
 
 
+				/////////////////////////////////////
 
-				function timers2(rectName, planetIndex, _data){
-					d3.timer(function() {
-				    var delta = (Date.now() - t0);
-				    rectName.attr("transform", function(d,t) {
-				    	var orbitalPeriod = _data[planetIndex].orbitalperiod;
-						var rotateP = (90 + delta * (1/orbitalPeriod)*5);
-						return "rotate("+ (rotateP)  + ","+ _data[8].sunDistance +","+ _data[8].sunDistance +")";
-						})
-			    	}
-			    )//END OF TIMER
-				}//END OF FUNCTION
+			
 
 
 
-
-
-					////////////////////////////////////////////////////////////////////////////////////
+				////////////////////////////////////////////////////////////////////////////////////
 
 			function showTooltip(_data, idNum)
 				{
@@ -768,7 +734,7 @@
 				d3.selectAll(".sun").transition().duration(750).style("opacity", "0").remove();
 				d3.selectAll(".orbitals").transition().duration(750).style("opacity", "0").remove();
 				d3.selectAll(".planets").transition().duration(750).style("opacity", "0").remove();
-				makeEverything(sizeData).transition().delay(750).duration(750);
+				makeEverything(sizeData).transition().delay(750).duration(0);
 			}
 
 			function fsetCustom(){
@@ -913,7 +879,9 @@
 					w = 1000;
 					h = 800;
 					var barPadding = 5;
-					paddingLeft = 400;
+					var Axispadding = 50;
+
+					
 
 		            svgItem.selectAll("rect").append("g").attr("class", "barChart")
 					   .data(distanceScaled)
@@ -925,6 +893,63 @@
 					    for(var count = 0; count < i; count++){
 					    	tempSize=tempSize + sizeScaled[count]*5 + barPadding;
 					    	}
+
+					    	svgItem.append("line")
+					   		.attr("class", "gridLine")
+					   		.attr("id", "gridline-"+i)
+							.attr("x1", Axispadding)
+							.attr("y1", h- d/6)
+							.attr("x2", tempSize+width/5 - 5)
+							.attr("y2", h- d/6)
+							.style("stroke", "#cccccc")
+							.style("opacity", "0");
+
+							svgItem.append("g").append("text")
+							.attr("class", "gridLineText")
+							.attr("id", "gridLineText-"+i)
+							.text(function(d,i){
+								return distanceScaled[i]
+							})
+							.attr("x", function(){
+								return (tempSize+width/5)/2;
+							})
+							.attr("y", function(){
+								return h- d/6;
+							})
+							.style("color", "#99ff99")
+							.style("font-size", "25px")
+							.style("opacity", "0");
+
+							svgItem.append("line")
+					   		.attr("class", "gridLineRadius")
+					   		.attr("id", "gridlineRadius-"+i)
+							.attr("x1", tempSize+width/5)
+							.attr("y1", h- d/6 - 25)
+							.attr("x2", tempSize+width/5 + sizeScaled[i]*5)
+							.attr("y2", h- d/6 - 25)
+							.style("stroke", "#cccccc")
+							.style("opacity", "0");
+
+							svgItem.append("line")
+					   		.attr("class", "gridLineRadius")
+					   		.attr("id", "_gridlineRadius-"+i)
+							.attr("x1", tempSize+width/5)
+							.attr("y1", h- d/6 - 5)
+							.attr("x2", tempSize+width/5)
+							.attr("y2", h- d/6 - 30)
+							.style("stroke", "#cccccc")
+							.style("opacity", "0");
+
+							svgItem.append("line")
+					   		.attr("class", "gridLineRadius")
+					   		.attr("id", "_gridlineRadius2-"+i)
+							.attr("x1", tempSize+width/5 + sizeScaled[i]*5)
+							.attr("y1", h- d/6 - 5)
+							.attr("x2", tempSize+width/5 + sizeScaled[i]*5)
+							.attr("y2", h- d/6 - 30)
+							.style("stroke", "#cccccc")
+							.style("opacity", "0");
+
 					    return	tempSize+width/5;
 						})
 					   .attr("y", function(d) {
@@ -951,9 +976,50 @@
 		                	.delay(5000)	
 		                	.duration(400)		
 		                	.style("opacity", 0);
+					   })
+
+					   .on("mouseover", function(d,i){
+							d3.select("#gridline-"+i).transition().duration(750).style("opacity","1");
+							d3.select("#gridLineText"+i).transition().duration(750).style("opacity","1");
+							d3.select("#gridlineRadius-"+i).transition().duration(750).style("opacity","1");
+							d3.select("#_gridlineRadius-"+i).transition().duration(750).style("opacity","1");
+							d3.select("#_gridlineRadius2-"+i).transition().duration(750).style("opacity","1");
+					   })
+					   .on("mouseout", function(d,i){
+							d3.select("#gridline-"+i).transition().duration(750).style("opacity", "0");
+							d3.select("#gridLineText"+i).transition().duration(750).style("opacity","0");
+							d3.select("#gridlineRadius-"+i).transition().duration(750).style("opacity","0");
+							d3.select("#_gridlineRadius-"+i).transition().duration(750).style("opacity","0");
+							d3.select("#_gridlineRadius2-"+i).transition().duration(750).style("opacity","0");
 					   });
 
+
+
+
+
+
 					   d3.selectAll(".bar").transition().delay(750).duration(750).style("opacity","1");
+
+
+
+					var yScale = d3.scale.linear()
+	        		.domain([0, 4050])    // values between 0 and 100
+					.range([800, 125]);
+
+					  
+
+					  var yAxis = d3.svg.axis()
+					  .scale(yScale)
+					  .orient("left")
+					  .ticks(8);
+
+
+					  svgItem.append("g")
+				    .attr("class", "axis")
+				    .attr("transform", "translate(" + Axispadding + ",0)")
+				    .call(yAxis)
+				    .style("stroke", "#99ff99")
+				    .style("fill", "red");
 
 				}//drawChart
 			}//fshowStatistics
