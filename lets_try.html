@@ -904,29 +904,39 @@
 							.style("stroke", "#cccccc")
 							.style("opacity", "0");
 
-							svgItem.append("g").append("text")
+							svgItem.append("text")
 							.attr("class", "gridLineText")
 							.attr("id", "gridLineText-"+i)
-							.text(function(d,i){
-								return distanceScaled[i]
+							.text(function(){
+								var string = Data[i+1].name+"-"+distanceScaled[i]+" mill km";
+								return string;
 							})
 							.attr("x", function(){
+								if(i==0 || i==1)
+									return (tempSize+width/5)/2 - 50;
 								return (tempSize+width/5)/2;
 							})
 							.attr("y", function(){
-								return h- d/6;
-							})
-							.style("color", "#99ff99")
+								return h- d/6;})
 							.style("font-size", "25px")
-							.style("opacity", "0");
+							.style("opacity", "0")
+							.style("fill", "#cccccc");
 
 							svgItem.append("line")
 					   		.attr("class", "gridLineRadius")
 					   		.attr("id", "gridlineRadius-"+i)
 							.attr("x1", tempSize+width/5)
-							.attr("y1", h- d/6 - 25)
+							.attr("y1",function(){
+								if(i==3)
+									return h- d/6 - 25 - 60;
+								return h- d/6 - 25;
+							} )
 							.attr("x2", tempSize+width/5 + sizeScaled[i]*5)
-							.attr("y2", h- d/6 - 25)
+							.attr("y2", function(){
+								if(i==3)
+									return h- d/6 - 25 - 60;
+								return h- d/6 - 25;
+							} )
 							.style("stroke", "#cccccc")
 							.style("opacity", "0");
 
@@ -936,22 +946,56 @@
 							.attr("x1", tempSize+width/5)
 							.attr("y1", h- d/6 - 5)
 							.attr("x2", tempSize+width/5)
-							.attr("y2", h- d/6 - 30)
+							.attr("y2",function(){
+								if(i == 3)
+									return h- d/6 - 30 -65;
+								return h- d/6 - 30;
+							} )
 							.style("stroke", "#cccccc")
 							.style("opacity", "0");
 
 							svgItem.append("line")
 					   		.attr("class", "gridLineRadius")
 					   		.attr("id", "_gridlineRadius2-"+i)
-							.attr("x1", tempSize+width/5 + sizeScaled[i]*5)
-							.attr("y1", h- d/6 - 5)
-							.attr("x2", tempSize+width/5 + sizeScaled[i]*5)
-							.attr("y2", h- d/6 - 30)
+							.attr("x1",function(){
+								return tempSize+width/5 + sizeScaled[i]*5;
+							} )
+							.attr("y1",function(){
+								return h- d/6 - 5;
+							} )
+							.attr("x2",function(){
+								return tempSize+width/5 + sizeScaled[i]*5;
+							} )
+							.attr("y2",function(){
+								if(i == 3)
+									return h- d/6 - 5 - 90;
+								return h- d/6 - 30;
+							} )
 							.style("stroke", "#cccccc")
 							.style("opacity", "0");
 
+							svgItem.append("text")
+							.attr("class", "gridLineText2")
+							.attr("id", "_gridLineText-"+i)
+							.text(function(){
+								var string = Data[i+1].radius+" km";
+								return string;
+							})
+							.attr("x",function(){
+								return (tempSize+width/5) + (sizeScaled[i]*5)/2 -65;
+							})  
+							.attr("y",function(){
+								if(i==3)
+									return h- d/6 -100;
+								return h- d/6 - 25;
+							})
+							.style("font-size", "25px")
+							.style("opacity", "0")
+							.style("fill", "#cccccc");
+
 					    return	tempSize+width/5;
-						})
+						}) //x over haha :P /////////////////////////////////////////////////
+
 					   .attr("y", function(d) {
 						    return (h - d/6);  //Height minus data value
 						})
@@ -980,17 +1024,19 @@
 
 					   .on("mouseover", function(d,i){
 							d3.select("#gridline-"+i).transition().duration(750).style("opacity","1");
-							d3.select("#gridLineText"+i).transition().duration(750).style("opacity","1");
+							d3.select("#gridLineText-"+i).transition().duration(750).style("opacity","1");
 							d3.select("#gridlineRadius-"+i).transition().duration(750).style("opacity","1");
 							d3.select("#_gridlineRadius-"+i).transition().duration(750).style("opacity","1");
 							d3.select("#_gridlineRadius2-"+i).transition().duration(750).style("opacity","1");
+							d3.select("#_gridLineText-"+i).transition().duration(750).style("opacity","1");
 					   })
 					   .on("mouseout", function(d,i){
 							d3.select("#gridline-"+i).transition().duration(750).style("opacity", "0");
-							d3.select("#gridLineText"+i).transition().duration(750).style("opacity","0");
+							d3.select("#gridLineText-"+i).transition().duration(750).style("opacity","0");
 							d3.select("#gridlineRadius-"+i).transition().duration(750).style("opacity","0");
 							d3.select("#_gridlineRadius-"+i).transition().duration(750).style("opacity","0");
 							d3.select("#_gridlineRadius2-"+i).transition().duration(750).style("opacity","0");
+							d3.select("#_gridLineText-"+i).transition().duration(750).style("opacity","0");
 					   });
 
 
@@ -1013,13 +1059,15 @@
 					  .orient("left")
 					  .ticks(8);
 
-
 					  svgItem.append("g")
 				    .attr("class", "axis")
 				    .attr("transform", "translate(" + Axispadding + ",0)")
 				    .call(yAxis)
 				    .style("stroke", "#99ff99")
-				    .style("fill", "red");
+				    .style("fill", "red")
+				    .style("opacity", "0");
+
+				    d3.select(".axis").transition().delay(750).duration(750).style("opacity", "1");
 
 				}//drawChart
 			}//fshowStatistics
@@ -1038,6 +1086,9 @@
 
 				d3.selectAll(".bar").transition().duration(750).style("opacity","0");
 				d3.selectAll(".bar").transition().delay(750).remove();
+
+				d3.select(".axis").transition().duration(750).style("opacity", "0");
+				d3.select(".axis").transition().delay(750).duration(750).remove();
 			}
 
 
