@@ -849,7 +849,7 @@
 
 
 
-
+			/////////////////////////////////////////////////////////////////////////////////////
 
 			function fshowStatistics(){
 				
@@ -1065,9 +1065,94 @@
 				    .call(yAxis)
 				    .style("stroke", "#99ff99")
 				    .style("fill", "red")
-				    .style("opacity", "0");
+				    .style("opacity", "0")
+				    	.append("text")
+				    	.text("[km*10^6]")
+				    	.style("font-size", "20px")
+				    	.style("fill", "red")
+				    	.attr("transform", "translate("+ 0 + ","+ 115 +")" );
+
 
 				    d3.select(".axis").transition().delay(750).duration(750).style("opacity", "1");
+
+
+
+
+				    //LEGEND
+
+				    legend=svgItem.append("g").attr("class", "legend")
+				    .attr("transform", "translate(" + (width-300) + "," + (70) + ")");
+
+				    legend.append("text")
+				    .attr("x", "0")
+				    .attr("y", "0")
+				    .text("Legend:")
+				    .style("fill", "#99ff99")
+				    .style("opacity", "1")
+				    .style("font-size", "20px")
+				    .style("text-decoration", "underline");
+
+				    legend.append("text")
+				    .attr("x", "0")
+				    .attr("y", "0")
+				    .text("Y axis: ")
+				    .style("fill", "#99ff99")
+				    .style("opacity", "1")
+				    .style("font-size", "20px")
+				    .style("text-decoration", "underline")
+				    .attr("transform", "translate(" + (10) + "," + (40) + ")");
+
+				    legend.append("text")
+				    .attr("x", "0")
+				    .attr("y", "0")
+				    .text("-distance from the sun")
+				    .style("fill", "#99ff99")
+				    .style("opacity", "1")
+				    .style("font-size", "20px")
+				    .attr("transform", "translate(" + (15) + "," + (60) + ")");
+
+				    legend.append("text")
+				    .attr("x", "0")
+				    .attr("y", "0")
+				    .text("Bar width: ")
+				    .style("fill", "#99ff99")
+				    .style("opacity", "1")
+				    .style("font-size", "20px")
+				    .style("text-decoration", "underline")
+				    .attr("transform", "translate(" + (10) + "," + (90) + ")");
+
+				    legend.append("text")
+				    .attr("x", "0")
+				    .attr("y", "0")
+				    .text("-planet radius")
+				    .style("fill", "#99ff99")
+				    .style("opacity", "1")
+				    .style("font-size", "20px")
+				    .attr("transform", "translate(" + (15) + "," + (110) + ")");
+
+				    legend.append("text")
+				    .attr("x", "0")
+				    .attr("y", "0")
+				    .text("-sun excluded")
+				    .style("fill", "#99ff99")
+				    .style("opacity", "1")
+				    .style("font-size", "20px")
+				    .attr("transform", "translate(" + (85) + "," + (150) + ")");
+
+				    legend.append("rect")
+				    .attr("x", "0")
+				    .attr("y", "0")
+				    .attr("rx", "20")
+				    .attr("ry", "20")
+				    .attr("width", "220")
+				    .attr("height", "190")
+				    .style("fill", "none")
+				    .style("stroke", "#99ff99")
+				    .attr("transform", "translate(" + (-10) + "," + (-20) + ")");
+
+				    legend.transition().duration(0).style("opacity", "0");
+				    legend.transition().delay(750).duration(750).style("opacity", "1");
+
 
 				}//drawChart
 			}//fshowStatistics
@@ -1089,6 +1174,9 @@
 
 				d3.select(".axis").transition().duration(750).style("opacity", "0");
 				d3.select(".axis").transition().delay(750).duration(750).remove();
+
+				legend.transition().delay(0).duration(750).style("opacity", "0");
+				legend.transition().delay(750).duration(750).remove();
 			}
 
 
