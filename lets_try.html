@@ -734,14 +734,14 @@
 				d3.selectAll(".sun").transition().duration(750).style("opacity", "0").remove();
 				d3.selectAll(".orbitals").transition().duration(750).style("opacity", "0").remove();
 				d3.selectAll(".planets").transition().duration(750).style("opacity", "0").remove();
-				makeEverything(sizeData).transition().delay(750).duration(0);
+				makeEverything(sizeData);
 			}
 
 			function fsetCustom(){
 				d3.selectAll(".sun").transition().duration(750).style("opacity", "0").remove();
 				d3.selectAll(".orbitals").transition().duration(750).style("opacity", "0").remove();
 				d3.selectAll(".planets").transition().duration(750).style("opacity", "0").remove();
-				makeEverything(customData).transition().delay(750).duration(750);
+				makeEverything(customData);
 			}
 
 
